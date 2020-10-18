@@ -1,0 +1,45 @@
+import sjcl from "sjcl";
+
+const getDataToCreateChat = (username, senderPublicKey, receiverPublicKey) => {
+	// public key must be valid to create a new chat
+	// validate if sender.pk and receiver.pk are not null
+
+	const myPublicKey = new sjcl.ecc.elGamal.publicKey(
+		sjcl.ecc.curves.c256,
+		sjcl.codec.base64.toBits(receiverPublicKey)
+	);
+
+	const newReceiverPublicKey = new sjcl.ecc.elGamal.publicKey(
+		sjcl.ecc.curves.c256,
+		sjcl.codec.base64.toBits(receiverPublicKey)
+	);
+
+	const secretSymmetricalKey = sjcl.codec.base64.fromBits(
+		sjcl.random.randomWords(8, 10)
+	);
+	const secretSymmetrical1 = sjcl.encrypt(myPublicKey, secretSymmetricalKey);
+	const secretSymmetrical2 = sjcl.encrypt(
+		newReceiverPublicKey,
+		secretSymmetricalKey
+	);
+
+	const data = {
+		sk_sym_1: secretSymmetrical1,
+		sk_sym_2: secretSymmetrical2,
+		receiver_username: username,
+		receiver_public_key: receiverPublicKey,
+	};
+
+	return data;
+};
+
+const computeSymmetrycalKey = (username, encryptedSymmetricalKey) => {
+	const secretSerialized = JSON.parse(sessionStorage.getItem(username))['secret_key']
+	// Unserialize private key
+	const secretUnserialized = new sjcl.ecc.elGamal.secretKey(
+		sjcl.ecc.curves.c256,
+		sjcl.ecc.curves.c256.fromBits(sjcl.codec.base64.toBits(secretSerialized))
+	);
+	const symmetricalKey = sjcl.decrypt(secretUnserialized, encryptedSymmetricalKey)
+	return symmetricalKey
+}
