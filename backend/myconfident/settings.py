@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'messages.apps.MessagesConfig',
+    'chats.apps.ChatsConfig'
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
