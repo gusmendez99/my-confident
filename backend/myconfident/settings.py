@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'messages.apps.MessagesConfig',
-    'chats.apps.ChatsConfig'
+    'chats.apps.ChatsConfig',
+    'rest_framework',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
