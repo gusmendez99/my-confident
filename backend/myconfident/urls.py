@@ -15,7 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework import routers
+
+from chats.views import ChatViewSet
+from messages.views import MessageViewSet
+from users.views import CustomUserViewSet
+
+router = routers.DefaultRouter()
+
+router.register(r'chats', ChatViewSet)
+router.register(r'messages', MessageViewSet)
+router.register(r'users', CustomUserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^api/v1/', include(router.urls))
 ]
