@@ -1,24 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import SignIn from './screens/SignIn';
+import SignUp from './screens/SignUp';
+import StartChat from './screens/StartChat';
+import tachyons from 'tachyons';
 
 function App() {
+  const [isAuth, changeIsAuth] = useState(false);
+  const [hasAccount, changeHasAccount] = useState(true);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="vh-100 flex flex-column justify-center">
+      { isAuth ? (
+        <StartChat />
+        ) : hasAccount ? (
+          <SignIn onAuthCompleted={changeIsAuth} onSelectSignUp={changeHasAccount}/>
+        ) : (
+          <SignUp onAuthCompleted={changeIsAuth} onSelectSignIn={changeHasAccount}/>
+        )
+      }
     </div>
   );
 }
