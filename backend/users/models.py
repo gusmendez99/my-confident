@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class CustomUser(AbstractUser):
-    dt = models.DateTimeField()
+    dt = models.DateTimeField(auto_now=True)
     pass_hash = models.CharField(max_length=60)
     public_key = models.CharField(max_length=256)
     user_data = models.TextField()
