@@ -1,0 +1,7 @@
+export const SIGN_IN_STARTED = "SIGN_IN_STARTED";
+export const SIGN_IN_COMPLETED = "SIGN_IN_COMPLETED";
+export const SIGN_IN_FAILED = "SIGN_IN_FAILED";
+export const SIGN_UP_STARTED = "SIGN_UP_STARTED";
+export const SIGN_UP_COMPLETED = "SIGN_UP_COMPLETED";
+export const SIGN_UP_FAILED = "SIGN_UP_FAILED";
+export const SIGN_OUT = "SIGN_OUT";
