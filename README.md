@@ -1,29 +1,58 @@
 # My Confident
 
-End-to-end crypto chat, made with Django and React
+End-to-end crypto chat, made with Flask and React
 
-## Installation
+## Backend
+
+### Installation
 
 Create a new virtualenv in this folder:
 ```
-python3 -m venv env
-source env/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 ```
 
-### Backend
+Then, install Flask dependencies
 ```
-pip install -r requirements.txt
 cd backend
-python3 manage.py runserver
+pip3 install -r requirements.txt
 ```
 
-### Frontend
+### Run API
 
-Install dependencies with
+First, set environment variables (`DATABASE_URL` must be replaced with your own database url)
+```
+export FLASK_APP=app
+export FLASK_ENV=development
+export DATABASE_URL=/tmp/test.db
+export APP_SETTINGS=config.DevelopmentConfig
+```
+
+Then, run the following command
+```
+flask run
+```
+
+Finally, API will run on port `5000`
+
+### API Endpoints
+Endpoints list pending
+
+
+
+## Frontend
+
+### Installation
+Install React dependencies
 ```
 cd client
 yarn install
+```
+
+### Run
+Run the following command
+```
 yarn start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Finally, React app will run on port `3000`
