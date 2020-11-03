@@ -2,13 +2,13 @@ import sjcl from "sjcl";
 
 import { sha256 } from './crypto'
 
-const getSignInCryptoCredencials = (username, password) => {
+export const getSignInCryptoCredencials = (username, password) => {
 	const hashPassword = sha256(password);
 	const credentials = { username, password: hashPassword };
 	return credentials;
 };
 
-const saveUserData = (username, password, data, isNewUser = false) => {
+export const saveUserData = (username, password, data, isNewUser = false) => {
 	if (isNewUser && data) {
 		sessionStorage.setItem(username, data);
 	} else {
@@ -20,7 +20,7 @@ const saveUserData = (username, password, data, isNewUser = false) => {
 	}
 };
 
-const getSignUpCryptoCredentials = (username, password) => {
+export const getSignUpCryptoCredentials = (username, password) => {
 	// Username and password must be valid, so we need to add regex to forms
 	const pair = sjcl.ecc.elGamal.generateKeys(256);
 	const publicKey = pair.pub.get();

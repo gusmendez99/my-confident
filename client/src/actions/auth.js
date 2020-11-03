@@ -25,6 +25,11 @@ export const failSignUp = (error) => ({
 	payload: { error },
 });
 
+export const failSignIn = (error) => ({
+	type: types.SIGN_IN_FAILED,
+	payload: { error },
+});
+
 export const signOut = () => ({
 	type: types.SIGN_OUT,
 });
