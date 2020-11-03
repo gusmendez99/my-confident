@@ -82,6 +82,7 @@ def create_user():
     # Check if user is already logged in
     if 'logged_in' in session and 'user' in session:
         # If so, redirect to home page
+        print("Already logged in")
         return redirect(url_for('home'))
     username = request.form.get('username')
     password = request.form.get('password') 
