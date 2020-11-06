@@ -4,7 +4,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import rootReducer from "./reducers";
-//import rootSaga from './sagas';
+import rootSaga from './sagas/rootSaga';
 
 const composeEnhancers =
 	typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -32,7 +32,7 @@ export const configureStore = () => {
 	);
 
 	const persistor = persistStore(store);
-	//sagaMiddleware.run(rootSaga);
+	sagaMiddleware.run(rootSaga);
 
 	return { store, persistor };
 };
