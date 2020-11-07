@@ -8,9 +8,11 @@ from flask import Flask, jsonify, make_response, redirect, render_template, requ
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO, join_room, leave_room, send, emit, disconnect
 from flask_sslify import SSLify
+from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app)
 app.config.from_object(os.environ['APP_SETTINGS'])
 socketio = SocketIO(app)
 sslify = SSLify(app)
