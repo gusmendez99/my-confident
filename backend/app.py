@@ -117,7 +117,7 @@ def create_user():
     # Redirect new user to home page
     session['logged_in'] = True
     session['user'] = models.find_user_by_name(username).to_dict()
-    return jsonify(error=None)
+    return jsonify(id=id, username=username, password=password, public_key=public_key, user_data=user_data)
 
 
 @app.route('/logout')
