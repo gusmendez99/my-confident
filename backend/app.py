@@ -68,7 +68,7 @@ def login():
         else:
             return jsonify(error='Invalid username and/or password')
     # Deliver login page
-    return render_template('login.html', error=error)
+    return jsonify(error=error)
 
 @app.route('/user/find_all')
 def find_users():
@@ -200,7 +200,7 @@ def chat(id):
         encrypted_symmetric_key = chat.user1_sk_sym
     # Get messages for this chat and render the chat view
     messages = [message.to_dict() for message in models.get_chat_messages(id)]
-    return render_template('chat.html', chat_id=chat_id, enc_sym_key=encrypted_symmetric_key, messages=messages, user_id=user_id, username=username, other_user=other_username)
+    return jsonify(chat_id=chat_id, enc_sym_key=encrypted_symmetric_key, messages=messages, user_id=user_id, username=username, other_user=other_username)
 
 @app.route('/chat/<int:id>/search', methods=['GET', 'POST'])
 def search_results(id):
@@ -248,7 +248,7 @@ def search_results(id):
                 other_username = chat.user2_name
                 encrypted_symmetric_key = chat.user1_sk_sym
             
-            return render_template('chat_search.html', chat_id=chat_id, enc_sym_key=encrypted_symmetric_key, messages=messages, user_id=user_id, username=username, other_user=other_username)
+            return jsonify(chat_id=chat_id, enc_sym_key=encrypted_symmetric_key, messages=messages, user_id=user_id, username=username, other_user=other_username)
         
     
 @app.route('/chat/<int:id>/update/pairs', methods=['POST'])
