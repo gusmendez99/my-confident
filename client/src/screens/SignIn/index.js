@@ -19,7 +19,7 @@ function SignIn({onSignIn, onSelectSignUp}) {
           </div>
         </fieldset>
         <div className="">
-          <button onClick={() => onSignIn('prueba', '12345678')} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib">Sign In </button>
+          <button onClick={() => onSignIn('lmaoxxxxx', '12345678')} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib">Sign In </button>
         </div>
         <div className="lh-copy mt3 db">
           <span className="f6 dib">Don't have an account? </span>

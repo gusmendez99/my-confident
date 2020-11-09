@@ -9,6 +9,7 @@ function App() {
   return (
     <div className="vh-100 flex flex-column justify-center">
       <SignUp />
+      <SignIn></SignIn>
     </div>
   );
 }
