@@ -1,0 +1,8 @@
+.chat-container {
+  height: 550px;
+  overflow : hidden;
+}
+
+.chat-container:hover {
+  overflow: auto;
+}

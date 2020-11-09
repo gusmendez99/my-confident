@@ -19,7 +19,7 @@ function* signIn(action) {
   try {
       const response = yield call(fetch, `${API_BASE_URL}/signin`, {
           method: 'POST',
-          body: bodyParser(action.payload),
+          //body: bodyParser(action.payload),
           headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
           },
@@ -43,7 +43,6 @@ export function* watchSignInStarted() {
 
 function* signup(action) {
   try {
-    const 
     const credentials = 
       authUtils.getSignUpCryptoCredentials(action.payload.username, action.payload.password)
     const response = yield call(fetch, `${API_BASE_URL}/user/create`, {
@@ -58,13 +57,13 @@ function* signup(action) {
     } else if (response.status >= 300 && response.status <= 600) {
         yield put(actions.failSignUp('User is already logged in'));
     } else {
-        yield put(actions.failRegistration("Couldn't reach server"));
+        yield put(actions.failSignUp("Couldn't reach server"));
     }
   } catch (error) {
-      yield put(actions.failRegistration('CONNECTION FAILED'));
+      yield put(actions.failSignUp('CONNECTION FAILED'));
   }
 }
 
 export function* watchSignUpStarted() {
-  yield takeEvery(types.REGISTRATION_STARTED, signup);
+  yield takeEvery(types.SIGN_UP_STARTED, signup);
 }
