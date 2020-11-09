@@ -129,6 +129,21 @@ def logout():
     session.pop('search_ids', None)
     return redirect(url_for('login'))
 
+# Standard routing (server-side rendered pages)
+@app.route('/chats')
+def get_all_chats():
+    # Check if user is logged in
+    if 'logged_in' in session and 'user' in session:
+        user_id = session['user']['id']
+        username = session['user']['username']
+    else:
+        # User is not logged in, redirect to login page
+        return redirect(url_for('login'))
+
+    # Deliver home page
+    chats = [chat.to_dict() for chat in models.get_chats_for_user(user_id)]
+    return jsonify(chats=chats)
+
 @app.route('/chat/create', methods=['POST'])
 def create_chat():
     # Check if user is logged in

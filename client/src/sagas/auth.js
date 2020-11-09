@@ -43,7 +43,6 @@ export function* watchSignInStarted() {
 
 function* signup(action) {
   try {
-    const 
     const credentials = 
       authUtils.getSignUpCryptoCredentials(action.payload.username, action.payload.password)
     const response = yield call(fetch, `${API_BASE_URL}/user/create`, {
