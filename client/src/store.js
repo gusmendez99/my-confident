@@ -15,6 +15,7 @@ const composeEnhancers =
 
 export const configureStore = () => {
 	const sagaMiddleware = createSagaMiddleware();
+	const middlewares = [sagaMiddleware];
 	const persistedReducer = persistReducer(
 		{
 			key: 'myconfident',
@@ -28,7 +29,7 @@ export const configureStore = () => {
 
 	const store = createStore(
 		persistedReducer,
-		composeEnhancers(applyMiddleware(sagaMiddleware))
+		composeEnhancers(applyMiddleware(...middlewares))
 	);
 
 	const persistor = persistStore(store);
