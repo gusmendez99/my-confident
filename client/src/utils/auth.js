@@ -1,4 +1,4 @@
-import sjcl from "sjcl";
+import sjcl, { hash } from "sjcl";
 
 import { sha256 } from './crypto'
 
@@ -25,6 +25,7 @@ export const getSignUpCryptoCredentials = (username, password) => {
 	const pair = sjcl.ecc.elGamal.generateKeys(256);
 	const publicKey = pair.pub.get();
 	const secretKey = pair.sec.get();
+	const hashPassword = sha256(password);
 
 	const publicSerialized = sjcl.codec.base64.fromBits(
 		publicKey.x.concat(publicKey.y)
@@ -40,7 +41,7 @@ export const getSignUpCryptoCredentials = (username, password) => {
 
 	const credentials = {
 		username,
-		password,
+		password: hashPassword,
 		public_key: publicSerialized,
 		user_data: encryptedUserData,
 	};
