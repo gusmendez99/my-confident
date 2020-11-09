@@ -50,7 +50,6 @@ function* signup(action) {
     yield formData.append('password', credentials.password)
     yield formData.append('public_key', credentials.public_key)
     yield formData.append('user_data', credentials.user_data)
-
     const response = yield call(fetch, `${API_BASE_URL}/user/create`, {
       method: 'POST', 
       body: formData,
