@@ -7,7 +7,7 @@ import messages, * as messageSelectors from "./mesages";
 const reducer = combineReducers({
 	auth,
 	chats,
-	messages
+	messages,
 });
 
 export default reducer;

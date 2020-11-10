@@ -109,6 +109,7 @@ const error = (state = null, action) => {
 }
 
 const chats = combineReducers ({
+
     byId,
     order,
     isFetching,
