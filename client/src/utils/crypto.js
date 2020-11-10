@@ -30,7 +30,7 @@ export const xorHex = (left, right) => {
 	}
 	let result = "";
 
-	for (i = 0; i < left.length; i++) {
+	for (let i = 0; i < left.length; i++) {
 		let temp = parseInt(left.charAt(i), 16) ^ parseInt(right.charAt(i), 16);
 		result += temp.toString(16);
 	}
