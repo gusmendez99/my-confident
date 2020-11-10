@@ -25,7 +25,7 @@ export const startAddingChat = chat =>({
 });
 
 export const completeAddingChat = (oldId, chat) =>({
-    type: types.CHATS_ADD_COMPLETED,
+    type: types.CHAT_ADD_COMPLETED,
     payload: {
         oldId,
         chat,
@@ -33,7 +33,7 @@ export const completeAddingChat = (oldId, chat) =>({
 });
 
 export const failAddingChat = (oldId, error) =>({
-    type: types.CHATS_ADD_FAILED,
+    type: types.CHAT_ADD_FAILED,
     payload: {
         oldId,
         error,

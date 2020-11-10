@@ -24,7 +24,7 @@ export const isFetchingChats = state => chatSelectors.isFetchingChats(state.chat
 export const getChatError = state => chatSelectors.getError(state.chats);
 
 export const getMessage = (state, id) => messageSelectors.getMessage(state.messages, id);
-export const getMessagesofChat = (state, chat_id) => messageSelectors.getMessagesofChat(state.messages, chat_id);
+export const getChatMessages = (state, chat_id) => messageSelectors.getChatMessages(state.messages, chat_id);
 export const getAllMessages = state => messageSelectors.getAllMessages(state.messages);
 export const isFetchingMessages = state => messageSelectors.isFetchingMessages(state.messages);
 export const getMessagesError = state => messageSelectors.getError(state.messages);

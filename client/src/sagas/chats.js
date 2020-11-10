@@ -29,14 +29,14 @@ function* fetchChats(action) {
             // yield put(actions.completeFetchChats(chats, result));
         } else {
             const { message } = yield response.json();
-            yield put(actions.faileFetchChats(message));
+            yield put(actions.failFetchingChats(message));
         }
     } catch (error) {
         //yield console.log(message);
-        yield put(actions.faileFetchChats('CONNECTION FAILED'));
+        yield put(actions.failFetchingChats('CONNECTION FAILED'));
     }
 }
 
 export function* watchFetchStarted() {
-    yield takeEvery(types.FETCH_CHATS_STARTED, fetchChats);
+    yield takeEvery(types.CHATS_FETCH_STARTED, fetchChats);
 }

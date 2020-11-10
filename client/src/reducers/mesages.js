@@ -50,7 +50,7 @@ const byId =(state = {}, action) =>{
     }
 };
 
-const order = (sate = [], action) => {
+const order = (state = [], action) => {
     switch(action.type){
         case types.MESSAGE_ADD_COMPLETED:{
             return union(state, action.payload.order);
@@ -74,7 +74,7 @@ const isFetching = (state = false, action) =>{
         case types.MESSAGES_FETCH_FAILED: {
             return false;
         }
-        case type.MESSAGES_FETCH_STARTED:{
+        case types.MESSAGES_FETCH_STARTED:{
             return true;
         }
         default:
@@ -109,7 +109,7 @@ const messages = combineReducers ({
 export default messages
 
 export const getMessage = (state, id) => state.byId[id];
-export const getMessagesofChat = (state, chat_id) => filter(state.byId, msg => msg.chat_id === chat_id);
-export const getAllMessages = state => state.order.map(id => getChat(state,id));
+export const getChatMessages = (state, chat_id) => filter(state.byId, msg => msg.chat_id === chat_id);
+export const getAllMessages = state => state.order.map(id => getChatMessages(state,id));
 export const isFetchingMessages = state => state.isFetching;
 export const getError = state => state.error;

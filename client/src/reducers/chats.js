@@ -53,7 +53,7 @@ const byId =(state = {}, action) =>{
     }
 };
 
-const order = (sate = [], action) => {
+const order = (state = [], action) => {
     switch(action.type){
         case types.CHATS_FETCH_COMPLETED:{
             return union(state, action.payload.order);
@@ -80,7 +80,7 @@ const isFetching = (state = false, action) =>{
         case types.CHATS_FETCH_FAILED: {
             return false;
         }
-        case type.CHATS_FETCH_STARTED:{
+        case types.CHATS_FETCH_STARTED:{
             return true;
         }
         default:

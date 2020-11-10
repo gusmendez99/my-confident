@@ -68,12 +68,12 @@ const Chats = ({ chats, isFetching, onLoad }) => {
   
   export default connect(
       state => ({
-          chats: selectors.getChats(state),
-          isFetching: selectors.getIsFetching(state),
+          chats: selectors.getAllChats(state),
+          isFetching: selectors.isFetchingChats(state),
       }),
       dispatch => ({
           onLoad() {
-              dispatch(actions.startFetchChats());
+              dispatch(actions.startFetchingChats());
           }
       })
   )(Chats);
