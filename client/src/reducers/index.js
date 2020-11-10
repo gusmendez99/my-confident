@@ -1,11 +1,13 @@
 import { combineReducers } from "redux";
 
 import auth, * as authSelectors from "./auth";
-import chats, * as chatsSelectors from "./chats";
+import chats, * as chatSelectors from "./chats";
+import messages, * as messageSelectors from "./mesages";
 
 const reducer = combineReducers({
 	auth,
 	chats,
+	messages,
 });
 
 export default reducer;
@@ -16,7 +18,13 @@ export const getIsAuthenticating = (state) =>
 export const getAuthError = (state) => authSelectors.getAuthError(state.auth);
 export const isAuthenticated = (state) => getAuthUser(state.auth) != null;
 
-export const getChat = (state, id) => chatsSelectors.getChat(state.chats, id);
-export const getChats = state => chatsSelectors.getChats(state.chats);
-export const getIsFetching = state => chatsSelectors.getIsFetching(state.chats);
-export const getError = state => chatsSelectors.getError(state.chats);
+export const getChat = (state, id) => chatSelectors.getChat(state.chats,id);
+export const getAllChats = state => chatSelectors.getAllChats(state.chats);
+export const isFetchingChats = state => chatSelectors.isFetchingChats(state.chats);
+export const getChatError = state => chatSelectors.getError(state.chats);
+
+export const getMessage = (state, id) => messageSelectors.getMessage(state.messages, id);
+export const getMessagesofChat = (state, chat_id) => messageSelectors.getMessagesofChat(state.messages, chat_id);
+export const getAllMessages = state => messageSelectors.getAllMessages(state.messages);
+export const isFetchingMessages = state => messageSelectors.isFetchingMessages(state.messages);
+export const getMessagesError = state => messageSelectors.getError(state.messages);

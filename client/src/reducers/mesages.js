@@ -6,12 +6,12 @@ import filter from 'lodash/filter';
 
 import { combineReducers } from 'redux';
 
-import * as types from '../types/chats'
+import * as types from '../types/messages'
 
 
 const byId =(state = {}, action) =>{
     switch(action.type){
-        case types.CHATS_FETCH_COMPLETED:{
+        case types.MESSAGES_FETCH_COMPLETED:{
             const{entities, order} = action.payload;
             if(state){
                 const newState = {...state};
@@ -28,7 +28,7 @@ const byId =(state = {}, action) =>{
                 return newState
             }
         }
-        case types.CHAT_ADD_STARTED: {
+        case types.MESSAGE_ADD_STARTED: {
             const newState = {...state};
             newState[action.payload.id] = {
                 ...action.payload,
@@ -36,16 +36,13 @@ const byId =(state = {}, action) =>{
             };
             return newState
         }
-        case types.CHAT_ADD_COMPLETED:{
+        case types.MESSAGE_ADD_COMPLETED:{
             const{oldId,chat} = action.payload;
             const newState = omit(state,oldId);
             newState[chat.id] = {
                 ...chat,
                 isConfirmed: true
             }
-        }
-        case types.CHAT_DELETE_STARTED:{
-            return omit(state, action.payload.chatId)
         }
         default:{
             return state
@@ -55,18 +52,15 @@ const byId =(state = {}, action) =>{
 
 const order = (sate = [], action) => {
     switch(action.type){
-        case types.CHATS_FETCH_COMPLETED:{
+        case types.MESSAGE_ADD_COMPLETED:{
             return union(state, action.payload.order);
         }
-        case types.CHAT_ADD_STARTED:{
+        case types.MESSAGE_ADD_STARTED:{
             return[...state, action.payload.id];
         }
-        case types.CHAT_ADD_COMPLETED:{
+        case types.MESSAGE_ADD_COMPLETED:{
             const{oldId, chat} = action.payload;
             return state.map(id => id === oldId? chat.id : id);
-        }
-        case types.CHAT_DELETE_STARTED:{
-            return state.filter(id => id !== action.payload.id);
         }
         default:{
             return state
@@ -76,11 +70,11 @@ const order = (sate = [], action) => {
 
 const isFetching = (state = false, action) =>{
     switch(action.type) {
-        case types.CHATS_FETCH_COMPLETED:
-        case types.CHATS_FETCH_FAILED: {
+        case types.MESSAGES_FETCH_COMPLETED:
+        case types.MESSAGES_FETCH_FAILED: {
             return false;
         }
-        case type.CHATS_FETCH_STARTED:{
+        case type.MESSAGES_FETCH_STARTED:{
             return true;
         }
         default:
@@ -90,17 +84,14 @@ const isFetching = (state = false, action) =>{
 
 const error = (state = null, action) => {
     switch(action.type) {
-        case types.CHATS_FETCH_COMPLETED:
-        case types.CHATS_FETCH_STARTED:
-        case types.CHAT_ADD_STARTED:
-        case types.CHAT_ADD_COMPLETED:
-        case types.CHAT_DELETE_STARTED:
-        case types.CHAT_DELETE_COMPLETED: {
+        case types.MESSAGES_FETCH_COMPLETED:
+        case types.MESSAGES_FETCH_STARTED:
+        case types.MESSAGE_ADD_STARTED:
+        case types.MESSAGE_ADD_COMPLETED: {
             return null;
         }
-        case types.CHATS_FETCH_FAILED:
-        case types.CHAT_ADD_FAILED:
-        case types.CHAT_DELETE_FAILED:{
+        case types.MESSAGES_FETCH_FAILED:
+        case types.MESSAGE_ADD_FAILED: {
             return action.payload.error;
         }
         default:
@@ -108,17 +99,17 @@ const error = (state = null, action) => {
     }
 }
 
-const chats = combineReducers ({
-
+const messages = combineReducers ({
     byId,
     order,
     isFetching,
     error
 });
 
-export default chats
+export default messages
 
-export const getChat = (state, id) => state.byId[id];
-export const getAllChats = state => state.order.map(id => getChat(state,id));
-export const isFetchingChats = state => state.isFetching;
+export const getMessage = (state, id) => state.byId[id];
+export const getMessagesofChat = (state, chat_id) => filter(state.byId, msg => msg.chat_id === chat_id);
+export const getAllMessages = state => state.order.map(id => getChat(state,id));
+export const isFetchingMessages = state => state.isFetching;
 export const getError = state => state.error;
