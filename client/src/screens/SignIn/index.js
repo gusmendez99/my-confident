@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/auth';
 
-function SignIn({onSignIn, onSelectSignUp}) {
-  
+const SignIn = ({onSignIn, onSelectSignUp}) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   return (
     <main className="">
       <div className="measure center">
@@ -11,19 +12,19 @@ function SignIn({onSignIn, onSelectSignUp}) {
           <legend className="f4 fw6 ph0 mh0">Sign In</legend>
           <div className="mt3">
             <label className="db fw6 lh-copy f6" htmlFor="name">Username</label>
-            <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="name" name="email-address"  id="email-address" />
+            <input onChange={(event) => setUsername(event.target.value)} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="name" name="username"  id="username" />
           </div>
           <div className="mv3">
             <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-            <input className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password"  id="password" />
+            <input onChange={(event) => setPassword(event.target.value)} className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password"  id="password" />
           </div>
         </fieldset>
         <div className="">
-          <button onClick={() => onSignIn('urbs', '12345678')} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib">Sign In </button>
+          <button onClick={() => onSignIn(username, password)} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib">Sign In </button>
         </div>
         <div className="lh-copy mt3 db">
           <span className="f6 dib">Don't have an account? </span>
-          <button onClick={() => onSelectSignUp(false)} className="f6 dim outline-0 bn bg-transparent dib pointer">Sign up</button>
+          <button className="f6 dim outline-0 bn bg-transparent dib pointer">Sign up</button>
         </div>
       </div>
     </main>

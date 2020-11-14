@@ -27,7 +27,8 @@ function* signIn(action) {
       yield response.json().then((data) => {
         userData = data
       })
-      yield put(actions.completeSignIn(userData));
+      yield console.log(userData)
+      yield put(actions.completeSignIn(userData.user_data));
     } else {
       const {message} = yield response.json();
       yield put(actions.failSignIn(message));
