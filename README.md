@@ -73,7 +73,7 @@ yarn install
 ### Run
 Run the following command
 ```
-yarn start
+yarn start 
 ```
 
 Finally, React app will run on port `3000`
