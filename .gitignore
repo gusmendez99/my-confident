@@ -180,7 +180,7 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
-# DB
+# db
 *.db
 
 # PyBuilder
