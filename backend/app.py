@@ -97,7 +97,7 @@ def refresh():
     return jsonify(token=new_token)
 
 
-@app.route(f"{API_BASE_URL}/user/create", methods=["POST"])
+@app.route(f"{API_BASE_URL}/sign-up", methods=["POST"])
 def create_user():
     req = request.get_json(force=True)
     username = req.get("username", None)
@@ -158,9 +158,8 @@ def logout():
 @auth_required
 def get_public_key():
 
-    req = request.get_json(force=True)
     sender_public_key = flask_praetorian.current_user().public_key
-    receiver_username = req.get("receiver_username", "")
+    receiver_username = request.args.get('receiver_username', '')
     # Make sure that the receiver exists
     if not models.check_if_user_exists(receiver_username):
         return jsonify(error="This user does not exist.")
@@ -171,11 +170,10 @@ def get_public_key():
     )
 
 
-@app.route(f"{API_BASE_URL}/user/find_all")
+@app.route(f"{API_BASE_URL}/user/find-all")
 @auth_required
 def find_users():
-    req = request.get_json(force=True)
-    username = req.get("term", "")
+    username = request.args.get('term', '')
     similar_usernames = models.find_user_by_name_fuzzy(username)
     usernames_found = [
         {"label": user.to_dict()["username"], "value": user.to_dict()["username"]}
@@ -278,7 +276,7 @@ def chat(id):
     )
 
 
-@app.route(f"{API_BASE_URL}/chat/<int:id>/update/pairs", methods=["POST"])
+@app.route(f"{API_BASE_URL}/chat/<int:id>/update-pairs", methods=["POST"])
 @auth_required
 def chat_encoded_pairs(id):
     req = request.get_json(force=True)

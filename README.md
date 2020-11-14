@@ -38,14 +38,14 @@ Finally, API will run on port `5000`
 ### API Endpoints
 Endpoints list pending
 * User
-  * Create new user (POST)
-    * http://127.0.0.1:5000/user/create
+  * Sign Up(POST)
+    * http://127.0.0.1:5000/api/v1/sign-up
   * Login (POST)
-    * http://127.0.0.1:5000/login
+    * http://127.0.0.1:5000/api/v1/login
   * Public key of a receiver (GET) 
-    * http://127.0.0.1:5000/public_key?receiver_username=rob
+    * http://127.0.0.1:5000/api/v1/public_key?receiver_username=rob
   * All users that match with term parameter (GET)
-    * http://127.0.0.1:5000/user/find_all?term=rob
+    * http://127.0.0.1:5000/user/find-all?term=rob
   * Log out (GET)
     * http://127.0.0.1:5000/logout
 * Chat
@@ -55,11 +55,10 @@ Endpoints list pending
     * http://127.0.0.1:5000/chat/delete/1
   * Chat (GET)
     * http://127.0.0.1:5000/chat/1
-* Pending
-    * Search chat
-      * http://127.0.0.1:5000/chat/1/search
-    * Update pairs
-      * http://127.0.0.1:5000/chat/1/update/pairs
+* Update pairs
+  * http://127.0.0.1:5000/chat/1/update-pairs
+* Search
+  * Not implemented
 
 ## Frontend
 
