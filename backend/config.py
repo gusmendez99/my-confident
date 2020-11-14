@@ -15,8 +15,14 @@ class ProductionConfig(Config):
     except KeyError:
         SECRET_KEY = os.urandom(64)
 
+    JWT_ACCESS_LIFESPAN = {'hours': 24}
+    JWT_REFRESH_LIFESPAN = {'days': 30}
+
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/test.db"
     SECRET_KEY = 'development-key'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    JWT_ACCESS_LIFESPAN = {'hours': 24}
+    JWT_REFRESH_LIFESPAN = {'days': 30}

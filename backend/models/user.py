@@ -1,16 +1,16 @@
-from app import DB
+from app import db
 from datetime import datetime
 import bcrypt
 
-class User(DB.Model):
+class User(db.Model):
     __tablename__ = 'users'
 
-    id = DB.Column(DB.Integer, primary_key=True)
-    dt = DB.Column(DB.DateTime, nullable=False)
-    username = DB.Column(DB.String(32), unique=True, nullable=False)
-    pass_hash = DB.Column(DB.String(60), nullable=False)
-    public_key = DB.Column(DB.String(256), nullable=False)
-    user_data = DB.Column(DB.Text, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    dt = db.Column(db.DateTime, nullable=False)
+    username = db.Column(db.String(32), unique=True, nullable=False)
+    pass_hash = db.Column(db.String(60), nullable=False)
+    public_key = db.Column(db.String(256), nullable=False)
+    user_data = db.Column(db.Text, nullable=False)
 
     def __init__(self, username, pass_hash, public_key, user_data):
         self.dt = datetime.utcnow()
@@ -31,6 +31,21 @@ class User(DB.Model):
             'public_key': self.public_key,
             'user_data': self.user_data
         }
+    
+    @classmethod
+    def lookup(cls, username):
+        return cls.query.filter_by(username=username).one_or_none()
+
+    @classmethod
+    def identify(cls, id):
+        return cls.query.get(id)
+
+    @property
+    def identity(self):
+        return self.id
+
+    def is_valid(self):
+        return self.is_active
 
 def find_user_by_name_fuzzy(username):
     #Queries using part of a username. Does a fuzzy search through database.
@@ -57,9 +72,9 @@ def add_user_to_db(username, password, public_key, user_data):
     # Create User instance
     new_user = User(username, pass_hash, public_key, user_data)
     # Insert to table
-    DB.session.add(new_user)
+    db.session.add(new_user)
     # Commit
-    DB.session.commit()
+    db.session.commit()
     # Return the new user's id
     return new_user.id
 
