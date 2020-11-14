@@ -17,14 +17,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO, join_room, leave_room, send, emit, disconnect
 from flask_sslify import SSLify
 from flask_cors import CORS
-from flask_praetorian import Praetorian
+from flask_praetorian import Praetorian, current_user
 from flask_praetorian.decorators import auth_required
 
 app = Flask(__name__)
 app.config.from_object(os.environ["APP_SETTINGS"])
 # Cors, Guardian and other config
 cors = CORS(app)
-guardian = Praetorian(app)
+guard = Praetorian(app)
 socketio = SocketIO(app)
 db = SQLAlchemy(app)
 sslify = SSLify(app)
@@ -48,7 +48,7 @@ active_chats = dict()
 # Run app
 cors.init_app(app)
 db.init_app(app)
-guardian.init_app(app, models.User, is_blacklisted=is_blacklisted)
+guard.init_app(app, models.User, is_blacklisted=is_blacklisted)
 sslify.init_app(app)
 socketio.run(app)
 
@@ -81,18 +81,17 @@ def login():
 
     user = guard.authenticate(username, password)
     user_saved = models.find_user_by_name(username).to_dict()
-    return jsonify(token=guard.encode_jwt_token(user), user_data=user_saved.user_data)
+    return jsonify(token=guard.encode_jwt_token(user), user_data=user_saved["user_data"])
 
 
-@app.route(f"{API_BASE_URL}/refresh", methods=["POST"])
+@app.route(f"{API_BASE_URL}/refresh-token", methods=["POST"])
 def refresh():
     """
     Refreshes an existing JWT by creating a new one that is a copy of the old
     except that it has a refrehsed access expiration.
     """
     print("refresh token request...")
-    req = request.get_json(force=True)
-    old_token = req.get_data()
+    old_token = guard.read_token_from_header()
     new_token = guard.refresh_jwt_token(old_token)
     return jsonify(token=new_token)
 
@@ -128,14 +127,14 @@ def create_user():
         return jsonify(error="Unexpected error.")
 
     # Return new user data
-    user = guard.authenticate(username, password)
     user_saved = models.find_user_by_name(username).to_dict()
+    user = guard.authenticate(username, password)
     return jsonify(
         token=guard.encode_jwt_token(user),
-        id=user_saved.id,
-        username=user_saved.username,
-        public_key=user_saved.public_key,
-        user_data=user_saved.user_data,
+        id=id,
+        username=username,
+        public_key=public_key,
+        user_data=user_data,
     )
 
 
@@ -143,10 +142,10 @@ def create_user():
 @auth_required
 def logout():
     # Clear stored session variables
-    req = request.get_json(force=True)
-    data = guard.extract_jwt_token(req["token"])
+    token = guard.read_token_from_header()
+    data = guard.extract_jwt_token(token)
     blacklist.add(data["jti"])
-    return flask.jsonify(message="token blacklisted ({})".format(req["token"]))
+    return jsonify(message="token was blacklisted ({})".format(token))
 
 
 #########################################
@@ -158,7 +157,7 @@ def logout():
 @auth_required
 def get_public_key():
 
-    sender_public_key = flask_praetorian.current_user().public_key
+    sender_public_key = current_user().public_key
     receiver_username = request.args.get('receiver_username', '')
     # Make sure that the receiver exists
     if not models.check_if_user_exists(receiver_username):
@@ -185,7 +184,7 @@ def find_users():
 @app.route(f"{API_BASE_URL}/chats")
 @auth_required
 def get_all_chats():
-    user_id = flask_praetorian.current_user().id
+    user_id = current_user().id
     # Deliver chats data
     chats = [chat.to_dict() for chat in models.get_chats_for_user(user_id)]
     return jsonify(chats=chats)
@@ -195,9 +194,9 @@ def get_all_chats():
 @auth_required
 def create_chat():
     req = request.get_json(force=True)
-    sender_public_key = flask_praetorian.current_user().public_key
-    username = flask_praetorian.current_user().username
-    user_id = flask_praetorian.current_user().id
+    sender_public_key = current_user().public_key
+    username = current_user().username
+    user_id = current_user().id
 
     sk_sym_1 = req.get("sk_sym_1", "")
     sk_sym_2 = req.get("sk_sym_2", "")
@@ -236,7 +235,7 @@ def create_chat():
 @app.route(f"{API_BASE_URL}/chat/delete/<int:id>", methods=["POST"])
 @auth_required
 def delete_chat(id):
-    user_id = flask_praetorian.current_user().id
+    user_id = current_user().id
     chat = models.get_chat(id)
     if not chat or (user_id != chat.user1_id and user_id != chat.user2_id):
         return make_response(jsonify(error="Chat not found"), 404)
@@ -247,8 +246,8 @@ def delete_chat(id):
 @app.route(f"{API_BASE_URL}/chat/<int:id>")
 @auth_required
 def chat(id):
-    username = flask_praetorian.current_user().username
-    user_id = flask_praetorian.current_user().id
+    username = current_user().username
+    user_id = current_user().id
     # Check that this chat exists and user is valid participant
     chat = models.get_chat(id)
     if not chat or (user_id != chat.user1_id and user_id != chat.user2_id):
@@ -280,12 +279,10 @@ def chat(id):
 @auth_required
 def chat_encoded_pairs(id):
     req = request.get_json(force=True)
-    encoded_pairs = req.get("pairs")
+    encoded_pairs = req.get("pairs", [])
 
     if encoded_pairs is None:
         return jsonify(error="Bad request. No encoded pairs found.")
-    else:
-        encoded_pairs = json.loads(encoded_pairs)
 
     added_pair_count = models.insert_pairs(encoded_pairs)
     if added_pair_count is None:
@@ -301,8 +298,8 @@ def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
         if (
-            not flask_praetorian.current_user()
-            or flask_praetorian.current_user() is None
+            not current_user()
+            or current_user() is None
         ):
             disconnect()
             print("User is not authenticated, disconnecting socket...")
@@ -321,8 +318,8 @@ def joined(data):
     """
     # we hope that preview token auth is still saved in flask_pretorian
     # without passing an preatorian auth decorator here
-    username = flask_praetorian.current_user().username
-    user_id = flask_praetorian.current_user().id
+    username = current_user().username
+    user_id = current_user().id
     chat_id = active_chats[user_id]
     # Safety check
     if username is None or user_id is None or chat_id is None:
@@ -342,8 +339,8 @@ def new_message(data):
     """Sent by a client when the user entered a new message.
     The message is sent to both people in the chat."""
     message = data["msg"]
-    username = flask_praetorian.current_user().username
-    user_id = flask_praetorian.current_user().id
+    username = current_user().username
+    user_id = current_user().id
     chat_id = active_chats[user_id]
     # Safety check
     if None in [message, user_id, chat_id] or len(message) == 0 or len(message) > 500:
@@ -386,8 +383,8 @@ def new_message(data):
 def left(data):
     """Sent by clients when they leave a chat.
     A status message is broadcast to both people in the chat."""
-    username = flask_praetorian.current_user().username
-    user_id = flask_praetorian.current_user().id
+    username = current_user().username
+    user_id = current_user().id
     chat_id = active_chats[user_id]
     # Safety check
     if chat_id is None:
