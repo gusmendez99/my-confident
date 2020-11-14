@@ -43,7 +43,7 @@ Endpoints list pending
   * Login (POST)
     * http://127.0.0.1:5000/api/v1/login
   * Public key of a receiver (GET) 
-    * http://127.0.0.1:5000/api/v1/public_key?receiver_username=rob
+    * http://127.0.0.1:5000/api/v1/public-key?receiver-username=rob
   * All users that match with term parameter (GET)
     * http://127.0.0.1:5000/api/v1/user/find-all?term=rob
   * Log out (GET)
