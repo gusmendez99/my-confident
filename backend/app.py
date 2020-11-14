@@ -153,12 +153,12 @@ def logout():
 #########################################
 
 
-@app.route(f"{API_BASE_URL}/public_key")
+@app.route(f"{API_BASE_URL}/public-key")
 @auth_required
 def get_public_key():
 
     sender_public_key = current_user().public_key
-    receiver_username = request.args.get('receiver_username', '')
+    receiver_username = request.args.get('receiver-username', '')
     # Make sure that the receiver exists
     if not models.check_if_user_exists(receiver_username):
         return jsonify(error="This user does not exist.")
