@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { connect } from 'react-redux';
 import * as selectors from '../../reducers';
 import * as actions from '../../actions/chats';
 import ChatList from "../../components/ChatList";
+import Chat from "../Chat";
 
 
 const Chats = ({  isFetching, onLoad }) => {
@@ -12,15 +13,23 @@ const Chats = ({  isFetching, onLoad }) => {
     //     onLoad();
     // }, [])
 
+    const [selectedChat, changeSelectedChat] = useState(null);
+
+    const handleSelectChat = (id) => {
+        changeSelectedChat(id);
+    }
+
     return (
-        <main className="mw7 left">
-            <div className="pa4">
-                <div className="overflow-auto">
+        <div className="mw9 center ph3-ns">
+                <div className="fl w-50 pa2">
                     <h1>Mis chats</h1>
-                    <ChatList /> 
+                    <ChatList handleSelectChat={handleSelectChat} /> 
                 </div>
+                <div className="fl w-50 pa2">
+                    <h1>Chat</h1>
+                    <Chat selectedChat={selectedChat}/>
             </div>
-        </main>
+        </div>
     );
 }
 

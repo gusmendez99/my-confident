@@ -31,7 +31,7 @@ const chats = [
 
 
 
-const ChatList = () => {
+const ChatList = ({ handleSelectChat}) => {
 
     // useEffect(() => {
     //     onLoad();
@@ -40,7 +40,7 @@ const ChatList = () => {
     return (
         <main className="mw6 left">
             {chats.map(chat => (
-                <Chat key={chat.id} chat={chat} />
+                <Chat key={chat.id} chat={chat} onView={handleSelectChat} />
             ))}        
         </main>
     )

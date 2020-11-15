@@ -4,9 +4,11 @@ import MessageList from '../../components/MessageList'
 
 import './styles.css'
 
-const Chat = ({ messages, sender }) => {
+const Chat = ({ messages, sender, selectedChat }) => {
   return (
     <div className="center">
+      {selectedChat ? 
+      <div>
       <div className="chat-container">
         <MessageList
           messages={messages}
@@ -23,6 +25,12 @@ const Chat = ({ messages, sender }) => {
             <div class="mt3"><input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="Send"/></div>
           </form>
         </div>
+      </div>
+      :
+      <div>
+        <h2>Selecciona un chat</h2>
+      </div>
+      } 
     </div>
   )
 }
