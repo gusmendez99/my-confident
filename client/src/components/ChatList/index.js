@@ -1,6 +1,12 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+
+import * as selectors  from '../../reducers';
+import { startFetchingChats } from '../../actions/chats';
 
 import Chat from '../Chat';
+
+
 
 
 //DUMMY DATA
@@ -31,31 +37,32 @@ const chats = [
 
 
 
-const ChatList = ({ handleSelectChat}) => {
+const ChatList = ({ handleSelectChat, isFetching, chats, onLoad, selectedChat }) => {
 
-    // useEffect(() => {
-    //     onLoad();
-    // }, [])
+    useEffect(() => {
+        onLoad();
+    }, [])
 
     return (
         <main className="mw6 left">
-            {chats.map(chat => (
-                <Chat key={chat.id} chat={chat} onView={handleSelectChat} />
+            {
+            isFetching ? <h1>Loading ...</h1> : chats.map(chat => (
+                <Chat key={chat.id} chat={chat} onView={handleSelectChat} isSelected={selectedChat === chat.id}/>
             ))}        
         </main>
     )
 }
 
-export default ChatList;
+// export default ChatList;
 
-// export default connect(
-//     state => ({
-//         chats: selectors.getAllChats(state),
-//         isFetching: selectors.isFetchingChats(state),
-//     }),
-//     dispatch => ({
-//         onLoad() {
-//             dispatch(actions.startFetchingChats());
-//         }
-//     })
-// )(ChatList);
+export default connect(
+    state => ({
+        chats: selectors.getAllChats(state),
+        isFetching: selectors.isFetchingChats(state),
+    }),
+    dispatch => ({
+        onLoad() {
+            dispatch(startFetchingChats());
+        }
+    })
+)(ChatList);
