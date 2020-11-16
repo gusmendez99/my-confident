@@ -5,7 +5,7 @@ import { v4 as uuidv4} from 'uuid';
 
 const MessageList = ({ messages, sender }) => {
   return (
-    <ul class="list pl0 mt0 measure center">
+    <ul className="list pl0 mt0 measure center">
       {
         messages.map((message, idx) => (
           <MessageItem

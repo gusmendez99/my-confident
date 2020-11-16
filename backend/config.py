@@ -24,5 +24,5 @@ class DevelopmentConfig(Config):
     SECRET_KEY = 'development-key'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    JWT_ACCESS_LIFESPAN = {'minutes': 1}
+    JWT_ACCESS_LIFESPAN = {'minutes': 60}
     JWT_REFRESH_LIFESPAN = {'minutes': 5}
