@@ -15,8 +15,7 @@ import * as schemas from '../schemas/chats';
 const API_BASE_URL = 'http://localhost:5000/api/v1';
 
 function* fetchChats(action) {
-    console.log("si entreo")
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDU0NjI2NTMsImV4cCI6MTYwNTQ2MjcxMywianRpIjoiZjM5OWI5MDAtNjIyYy00OTE5LWIxMjEtMTM2MTljNTNmYzlkIiwiaWQiOjIsInJscyI6IiIsInJmX2V4cCI6MTYwNTQ2Mjk1M30.4ziufY5unUTL_UZcFekgGVc4H5ZAYsR8hYgphjIoWZ0";
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDU4NDczMjgsImV4cCI6MTYwNTg0NzYyOCwianRpIjoiNTU1NWY2NTEtN2YxYi00YzlhLTkwNmItNTg4MjRiNjE4MGE3IiwiaWQiOjEsInJscyI6IiIsInJmX2V4cCI6MTYwNTg0NzYyOH0.few7mxBo1ArPj41oKuLjy4Vv6Tr80UmrpTmboL09p_Y";
     try {
         const response = yield call(axios.get, `${API_BASE_URL}/chats`, {
             headers: {
