@@ -23,11 +23,9 @@ function* signIn(action) {
       },
     });
     if (response.status === 200) {
-      let userData = '';
-      yield response.json().then((data) => {
-        userData = data
-      })
-      yield put(actions.completeSignIn(userData));
+      const result = yield response.json();
+      console.log("Result is: ", result)
+      yield put(actions.completeSignIn(result));
     } else {
       const {message} = yield response.json();
       yield put(actions.failSignIn(message));
@@ -52,11 +50,9 @@ function* signup(action) {
       },
     });
     if (response.status === 200) {
-      let userData = '';
-      yield response.json().then((data) => {
-        userData = data
-      })
-      yield put(actions.completeSignUp(userData));
+      const result = yield response.json();
+      console.log("Result is: ", result)
+      yield put(actions.completeSignUp(result));
     } else if (response.status >= 300 && response.status <= 600) {
         yield put(actions.failSignUp('User is already logged in'));
     } else {

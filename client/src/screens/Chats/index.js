@@ -2,14 +2,19 @@ import React, { useState } from 'react';
 
 import ChatList from "../../components/ChatList";
 import Chat from "../Chat";
+import { connect } from 'react-redux';
+
+import * as selectors from '../../reducers'
+import { startFetchingActiveChat } from '../../actions/chats'
 
 
-const Chats = () => {
+const Chats = ({ onSelectChat }) => {
 
 const [selectedChat, changeSelectedChat] = useState(null);
 
 const handleSelectChat = (id) => {
     changeSelectedChat(id);
+    onSelectChat(id)
 }
 
 return (
@@ -26,5 +31,15 @@ return (
     );
 }
 
-export default Chats;
+export default connect(
+    (state) => ({
+        isFetchingActiveChat: selectors.isFetchingActiveChat(state)
+    }),
+    (dispatch) => ({
+        onSelectChat(id) {
+            console.log("Retriving chat id...", id)
+            dispatch(startFetchingActiveChat(id))
+        }
+    })
+)(Chats);
 

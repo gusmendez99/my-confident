@@ -1,6 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux'
 
-const Chat = ({ chat, onDelete, onView, isSelected }) => {
+import * as selectors from '../../reducers'
+
+const Chat = ({ chat, onDelete, onView, isSelected, isFetchingActiveChat }) => {
     //const create_date = new Date(chat.dt).toLocaleDateString();
     const last_msg_date = new Date(chat.last_message_dt).toLocaleTimeString();
     return (
@@ -22,5 +25,14 @@ const Chat = ({ chat, onDelete, onView, isSelected }) => {
     );
 }
 
-export default Chat;
+export default connect(
+    (state) => ({
+        isFetchingActiveChat: selectors.isFetchingActiveChat(state),
+        activeChat: selectors.getActiveChat(state)
+    }), 
+    (dispatch) => ({
+        
+    })
+
+)(Chat);
 

@@ -27,9 +27,6 @@ function App() {
           <Route path="/signup">
             <SignUp />
           </Route>
-          <Route path="/chat">
-            <Chat />
-          </Route>
           <Route path="/start-chat">
             <StartChat />
           </Route>

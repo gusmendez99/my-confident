@@ -2,7 +2,6 @@ import omit from 'lodash/omit';
 import unionWith from 'lodash/unionWith';
 import union from 'lodash/union';
 import isEqual from 'lodash/isEqual';
-import filter from 'lodash/filter';
 
 import { combineReducers } from 'redux';
 
@@ -88,16 +87,51 @@ const isFetching = (state = false, action) =>{
     }
 };
 
+const activeChat = (state = null, action) => {
+    switch(action.type){
+        case types.ACTIVE_CHAT_FETCH_FAILED:
+        case types.ACTIVE_CHAT_FETCH_STARTED: {
+            return null
+        }
+        case types.ACTIVE_CHAT_FETCH_COMPLETED: {
+            return action.type.chat;
+        }
+        default: {
+            return state;
+        }
+    }
+}
+
+
+const isFetchingChat = (state = false, action) => {
+    switch(action.type) {
+        case types.ACTIVE_CHAT_FETCH_COMPLETED:
+        case types.ACTIVE_CHAT_FETCH_FAILED: {
+            return false;
+        }
+        case types.ACTIVE_CHAT_FETCH_STARTED: {
+            return true
+        }
+        default:
+            return state;
+
+
+    }
+}
+
 const error = (state = null, action) => {
     switch(action.type) {
         case types.CHATS_FETCH_COMPLETED:
         case types.CHATS_FETCH_STARTED:
+        case types.ACTIVE_CHAT_FETCH_STARTED:
         case types.CHAT_ADD_STARTED:
         case types.CHAT_ADD_COMPLETED:
         case types.CHAT_DELETE_STARTED:
-        case types.CHAT_DELETE_COMPLETED: {
+        case types.CHAT_DELETE_COMPLETED: 
+        case types.ACTIVE_CHAT_FETCH_COMPLETED: {
             return null;
         }
+        case types.ACTIVE_CHAT_FETCH_FAILED:
         case types.CHATS_FETCH_FAILED:
         case types.CHAT_ADD_FAILED:
         case types.CHAT_DELETE_FAILED:{
@@ -109,10 +143,11 @@ const error = (state = null, action) => {
 }
 
 const chats = combineReducers ({
-
     byId,
     order,
+    activeChat,
     isFetching,
+    isFetchingChat,
     error
 });
 
@@ -120,5 +155,7 @@ export default chats
 
 export const getChat = (state, id) => state.byId[id];
 export const getAllChats = state => state.order.map(id => getChat(state,id));
+export const getActiveChat = state => state.activeChat;
 export const isFetchingChats = state => state.isFetching;
+export const isFetchingActiveChat = state => state.isFetchingChat;
 export const getError = state => state.error;

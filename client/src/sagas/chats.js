@@ -15,28 +15,35 @@ import * as schemas from '../schemas/chats';
 const API_BASE_URL = 'http://localhost:5000/api/v1';
 
 function* fetchChats(action) {
-    console.log("si entreo")
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDU0NjI2NTMsImV4cCI6MTYwNTQ2MjcxMywianRpIjoiZjM5OWI5MDAtNjIyYy00OTE5LWIxMjEtMTM2MTljNTNmYzlkIiwiaWQiOjIsInJscyI6IiIsInJmX2V4cCI6MTYwNTQ2Mjk1M30.4ziufY5unUTL_UZcFekgGVc4H5ZAYsR8hYgphjIoWZ0";
+    //const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDU3NTc1NjUsImV4cCI6MTYwNTc1Nzg2NSwianRpIjoiN2VjN2YxMTMtZWFiZC00MGE3LThlZDMtZjg5OTkxNDYwOTZhIiwiaWQiOjEsInJscyI6IiIsInJmX2V4cCI6MTYwNTc1Nzg2NX0.wY5x49JCxPwBWk9TCei_CkGbrqkhk4lKhaiIBc6z7fs";
     try {
-        const response = yield call(axios.get, `${API_BASE_URL}/chats`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-        if (response.status === 200) {
-            const {
-                entities: { chats },
-                result,
-            } = normalize(response.data.chats, schemas.chats);
-            console.log("Succes retrieving chats", response);
-            yield put(actions.completeFetchingChats(chats, result));
+        const isAuth = yield select(selectors.isAuthenticated)
+        if(isAuth) {
+            const token = yield select(selectors.getAuthToken)
+            console.log(token)
+    
+            const response = yield call(axios.get, `${API_BASE_URL}/chats`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+                const {
+                    entities: { chats },
+                    result,
+                } = normalize(response.data.chats, schemas.chats);
+                console.log("Success retrieving chats", response);
+                yield put(actions.completeFetchingChats(chats, result));
+            } else {
+                const { message } = yield response.json();
+                yield put(actions.failFetchingChats(message));
+            }
         } else {
-            const { message } = yield response.json();
-            yield put(actions.failFetchingChats(message));
+            yield put(actions.failFetchingChats("You are not authenticated..."));
         }
     } catch (error) {
-        //yield console.log(message);
+        console.log(error);
         yield put(actions.failFetchingChats('CONNECTION FAILED'));
     }
 }

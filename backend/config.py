@@ -15,7 +15,7 @@ class ProductionConfig(Config):
     except KeyError:
         SECRET_KEY = os.urandom(64)
 
-    JWT_ACCESS_LIFESPAN = {'minutes': 1}
+    JWT_ACCESS_LIFESPAN = {'minutes': 60}
     JWT_REFRESH_LIFESPAN = {'minutes': 5}
 
 class DevelopmentConfig(Config):
