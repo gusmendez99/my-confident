@@ -94,7 +94,8 @@ const activeChat = (state = null, action) => {
             return null
         }
         case types.ACTIVE_CHAT_FETCH_COMPLETED: {
-            return action.type.chat;
+            const { chat } =  action.payload;
+            return chat;
         }
         default: {
             return state;

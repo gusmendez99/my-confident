@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux'
 import MessageList from '../../components/MessageList'
 
+import * as selectors from '../../reducers'
+
 import './styles.css'
 
-const Chat = ({ messages, sender, selectedChat }) => {
+const Chat = ({ messages, sender, activeChat, isFetchingActiveChat }) => {
+  console.log(messages, activeChat, isFetchingActiveChat)
   return (
     <div className="center">
-      {selectedChat ? 
+      {(!isFetchingActiveChat && activeChat != null) ? 
       <div>
       <div className="chat-container">
         <MessageList
@@ -28,7 +31,7 @@ const Chat = ({ messages, sender, selectedChat }) => {
       </div>
       :
       <div>
-        <h2>Selecciona un chat</h2>
+        <h2>Aun no has seleccionado un chat...</h2>
       </div>
       } 
     </div>
@@ -37,7 +40,21 @@ const Chat = ({ messages, sender, selectedChat }) => {
 
 export default connect(
   (state) => ({
-    messages: [
+    messages: selectors.getActiveChatMessages(state),
+    sender: selectors.getAuthUser(state),
+    isFetchingActiveChat: selectors.isFetchingActiveChat(state), 
+    activeChat: selectors.getActiveChat(state)
+  }),
+  (dispatch) => ({
+    // message sagas ommited, all message logic will work with websockets
+  })
+)(Chat)
+
+
+/*
+  MESSAGE STRUCTURE
+
+  messages: [
       {
         id: 1,
         author: "John",
@@ -75,10 +92,6 @@ export default connect(
         timestamp: new Date().toLocaleTimeString(),
       },
 
-    ],
-    sender: "Peter",
-  }),
-  (dispatch) => ({
+    ]
 
-  })
-)(Chat)
+*/
