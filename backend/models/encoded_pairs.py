@@ -1,15 +1,15 @@
-from app import db
+from app import DB
 from datetime import datetime
 import models.hash_utils
 
 column_length = 64
 
-class EncodedPair(db.Model):
+class EncodedPair(DB.Model):
     __tablename__ = 'encoded_pairs'
 
-    id = db.Column(db.Integer, primary_key=True)
-    hash_key = db.Column(db.String(column_length))
-    hash_value = db.Column(db.String(column_length))
+    id = DB.Column(DB.Integer, primary_key=True)
+    hash_key = DB.Column(DB.String(column_length))
+    hash_value = DB.Column(DB.String(column_length))
     
     def __init__(self, hash_key, hash_value):
         self.hash_key = hash_key
@@ -46,9 +46,9 @@ def insert_pairs(encoded_pairs):
         new_pair = EncodedPair(hash_key, hash_value)
         db_pairs.append(new_pair)
         
-    db.session.add_all(db_pairs)
+    DB.session.add_all(db_pairs)
     # Commit
-    db.session.commit()
+    DB.session.commit()
     # Return the new message
     return len(db_pairs)
     

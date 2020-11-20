@@ -1,19 +1,19 @@
-from app import db
+from app import DB
 from datetime import datetime
 
-class Message(db.Model):
+class Message(DB.Model):
     __tablename__ = 'messages'
 
-    id = db.Column(db.Integer, primary_key=True)
-    dt = db.Column(db.DateTime, nullable=False)
-    text = db.Column(db.String(500), nullable=False)
-    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    sender_username = db.Column(db.String(32), db.ForeignKey('users.username'), nullable=False)
-    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    receiver_username = db.Column(db.String(32), db.ForeignKey('users.username'), nullable=False)
-    chat_id = db.Column(db.Integer, db.ForeignKey('chats.id'), nullable=False)
-    chat = db.relationship('Chat',
-        backref=db.backref('messages', cascade="all, delete-orphan"),
+    id = DB.Column(DB.Integer, primary_key=True)
+    dt = DB.Column(DB.DateTime, nullable=False)
+    text = DB.Column(DB.String(500), nullable=False)
+    sender_id = DB.Column(DB.Integer, DB.ForeignKey('users.id'), nullable=False)
+    sender_username = DB.Column(DB.String(32), DB.ForeignKey('users.username'), nullable=False)
+    receiver_id = DB.Column(DB.Integer, DB.ForeignKey('users.id'), nullable=False)
+    receiver_username = DB.Column(DB.String(32), DB.ForeignKey('users.username'), nullable=False)
+    chat_id = DB.Column(DB.Integer, DB.ForeignKey('chats.id'), nullable=False)
+    chat = DB.relationship('Chat',
+        backref=DB.backref('messages', cascade="all, delete-orphan"),
         lazy='joined'
     )
 
@@ -57,9 +57,9 @@ def add_message(text, sender_id, sender_username, receiver_id, receiver_username
     # Create Message instance
     new_message = Message(text, sender_id, sender_username, receiver_id, receiver_username, chat_id)
     # Insert to table
-    db.session.add(new_message)
+    DB.session.add(new_message)
     # Commit
-    db.session.commit()
+    DB.session.commit()
     # Return the new message
     return new_message
 

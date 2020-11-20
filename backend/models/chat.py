@@ -1,19 +1,19 @@
-from app import db
+from app import DB
 from datetime import datetime
 
 
-class Chat(db.Model):
+class Chat(DB.Model):
     __tablename__ = 'chats'
 
-    id = db.Column(db.Integer, primary_key=True)
-    dt = db.Column(db.DateTime, nullable=False)
-    user1_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user1_name = db.Column(db.String(32), db.ForeignKey('users.username'), nullable=False)
-    user1_sk_sym = db.Column(db.String(500), nullable=False)
-    user2_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user2_name = db.Column(db.String(32), db.ForeignKey('users.username'), nullable=False)
-    user2_sk_sym = db.Column(db.String(500), nullable=False)
-    last_message_dt = db.Column(db.DateTime, nullable=False)
+    id = DB.Column(DB.Integer, primary_key=True)
+    dt = DB.Column(DB.DateTime, nullable=False)
+    user1_id = DB.Column(DB.Integer, DB.ForeignKey('users.id'), nullable=False)
+    user1_name = DB.Column(DB.String(32), DB.ForeignKey('users.username'), nullable=False)
+    user1_sk_sym = DB.Column(DB.String(500), nullable=False)
+    user2_id = DB.Column(DB.Integer, DB.ForeignKey('users.id'), nullable=False)
+    user2_name = DB.Column(DB.String(32), DB.ForeignKey('users.username'), nullable=False)
+    user2_sk_sym = DB.Column(DB.String(500), nullable=False)
+    last_message_dt = DB.Column(DB.DateTime, nullable=False)
 
     def __init__(self, user1_id, user1_name, user1_sk_sym, user2_id, user2_name, user2_sk_sym):
         self.dt = datetime.utcnow()
@@ -58,9 +58,9 @@ def create_chat(user1_id, user1_name, user1_sk_sym, user2_id, user2_name, user2_
     # Create Chat instance
     new_chat = Chat(user1_id, user1_name, user1_sk_sym, user2_id, user2_name, user2_sk_sym)
     # Insert into table
-    db.session.add(new_chat)
+    DB.session.add(new_chat)
     # Commit
-    db.session.commit()
+    DB.session.commit()
     return new_chat.id
 
 def get_chats_for_user(user_id):
@@ -73,7 +73,7 @@ def update_chat_last_message_time(chat_id, last_message_dt):
     # Update last message time
     chat.last_message_dt = last_message_dt
     # Commit
-    db.session.commit()
+    DB.session.commit()
 
 def find_chat_by_users(userA_id, userB_id):
     # Check for both possible orders for userA and userB in chat
@@ -91,6 +91,6 @@ def delete_chat(chat_id):
     if chat is None:
         return None
     # Delete from table
-    db.session.delete(chat)
+    DB.session.delete(chat)
     # Commit
-    db.session.commit()
+    DB.session.commit()

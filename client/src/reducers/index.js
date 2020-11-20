@@ -17,7 +17,6 @@ export const getIsAuthenticating = (state) =>
 	authSelectors.getIsAuthenticating(state.auth);
 export const getAuthError = (state) => authSelectors.getAuthError(state.auth);
 export const isAuthenticated = (state) => getAuthUser(state.auth) != null;
-export const getAuthToken = (state) => getAuthToken(state.auth);
 
 export const getChat = (state, id) => chatSelectors.getChat(state.chats,id);
 export const getAllChats = state => chatSelectors.getAllChats(state.chats);

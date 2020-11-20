@@ -9,18 +9,18 @@ import * as actions from '../actions/auth';
 import * as types from '../types/auth';
 import * as authUtils from '../utils/auth'
 
-const API_BASE_URL = 'http://localhost:5000/api/v1';
+const API_BASE_URL = 'http://localhost:5000';
 
 function* signIn(action) {
   try {
     const credentials = yield authUtils.getSignInCryptoCredencials(action.payload.username, action.payload.password);
+    const formData = new FormData();
+    yield formData.append('username', credentials.username)
+    yield formData.append('password', credentials.password)
 
     const response = yield call(fetch, `${API_BASE_URL}/login`, {
       method: 'POST',
-      body: JSON.stringify(credentials),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      body: formData,
     });
     if (response.status === 200) {
       let userData = '';
@@ -44,19 +44,22 @@ export function* watchSignInStarted() {
 function* signup(action) {
   try {
     const credentials = yield authUtils.getSignUpCryptoCredentials(action.payload.username, action.payload.password)
-    const response = yield call(fetch, `${API_BASE_URL}/sign-up`, {
+    
+    const formData = new FormData();
+    yield formData.append('username', credentials.username)
+    yield formData.append('password', credentials.password)
+    yield formData.append('public_key', credentials.public_key)
+    yield formData.append('user_data', credentials.user_data)
+    const response = yield call(fetch, `${API_BASE_URL}/user/create`, {
       method: 'POST', 
-      body: JSON.stringify(credentials),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      body: formData,
     });
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status <= 300) {
       let userData = '';
       yield response.json().then((data) => {
         userData = data
       })
-      yield put(actions.completeSignUp(userData));
+      yield put(actions.completeSignUp(credentials.user_data));
     } else if (response.status >= 300 && response.status <= 600) {
         yield put(actions.failSignUp('User is already logged in'));
     } else {

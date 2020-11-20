@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { persistStore, persistReducer } from "redux-persist";
-import storageSession from "redux-persist/lib/storage/session";
+import storage from "redux-persist/lib/storage";
 
 import rootReducer from "./reducers";
 import rootSaga from './sagas/rootSaga';
@@ -19,7 +19,7 @@ export const configureStore = () => {
 	const persistedReducer = persistReducer(
 		{
 			key: 'myconfident',
-			storage: storageSession,
+			storage,
 			whitelist: ["auth"],
 		},
 		rootReducer,
