@@ -14,8 +14,7 @@ const Search = () => {
     }
 
     return (
-        <main>
-            <div className="pa4-l">
+            <div className="flex justify-end pa4-l">
                 <Chips 
                     value={user}
                     onChange={handleChangeUser}
@@ -25,7 +24,7 @@ const Search = () => {
                         axios.get(`${API_BASE_URL}user/find-all?term=${value}`, 
                             {
                                 headers: {
-                                'Authorization': `Bearer ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDU4NTEyODMsImV4cCI6MTYwNTg1MTU4MywianRpIjoiYTk5MDg5ZjMtN2UwYy00NjQ2LWJlOTQtZDNjZTg3N2UzN2M3IiwiaWQiOjEsInJscyI6IiIsInJmX2V4cCI6MTYwNTg1MTU4M30.UKcYRNd-W5KW1aUqiurtg1JiSar74CUMSRn8In88Mfw"}`
+                                'Authorization': `Bearer ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDU4NTQzOTksImV4cCI6MTYwNTg1NDY5OSwianRpIjoiNTY5Mjk3NTEtZTYwNi00NjdhLTg1ZDAtNjNhNGQxMjIzZmRhIiwiaWQiOjEsInJscyI6IiIsInJmX2V4cCI6MTYwNTg1NDY5OX0.8Hh2zVEwl71uqRSjSLs8gOeUCc600tCVziopQM2LgHs"}`
                                 }
                             })
                             .then(function (response) {
@@ -34,22 +33,20 @@ const Search = () => {
                             .catch(error => console.log(error))
                     }
                 />
-                {
-                    user.length > 0 && user.length < 2 && (
-                            <button
-                                className="f6 f5-l button-reset fl pv3 tc bn bg-animate bg-black-70 hover-bg-black white pointer w-100 w-25-m w-20-l br2-ns br--right-ns"
-                            >
-                                Create
-                            </button>
-                    )
-                }
+                
+                    <button
+                        
+                        disabled={user.length <= 0 || user.length >= 2}
+                    >
+                        Create
+                    </button>
+                
                 {
                     user.length >= 2 && (
                         <p>Choose just one user</p>
                     )
                 }
             </div>
-        </main>
     );
 }
 
