@@ -11,40 +11,100 @@ import * as actions from '../actions/chats';
 import * as types from '../types/chats';
 import { normalize, schema } from 'normalizr';
 import * as schemas from '../schemas/chats';
+
+import * as messageActions from '../actions/messages';
 import { getDataToCreateChat } from '../utils/chat';
 
 const API_BASE_URL = 'http://localhost:5000/api/v1';
 
 function* fetchChats(action) {
-    console.log("si entreo")
     //const token = yield select(selectors.getAuthToken);
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDU0NjI2NTMsImV4cCI6MTYwNTQ2MjcxMywianRpIjoiZjM5OWI5MDAtNjIyYy00OTE5LWIxMjEtMTM2MTljNTNmYzlkIiwiaWQiOjIsInJscyI6IiIsInJmX2V4cCI6MTYwNTQ2Mjk1M30.4ziufY5unUTL_UZcFekgGVc4H5ZAYsR8hYgphjIoWZ0";
+
     try {
-        const response = yield call(axios.get, `${API_BASE_URL}/chats`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-        if (response.status === 200) {
-            const {
-                entities: { chats },
-                result,
-            } = normalize(response.data.chats, schemas.chats);
-            console.log("Succes retrieving chats", response);
-            yield put(actions.completeFetchingChats(chats, result));
+        const isAuth = yield select(selectors.isAuthenticated)
+        if(isAuth) {
+            const token = yield select(selectors.getAuthToken)
+    
+            const response = yield call(axios.get, `${API_BASE_URL}/chats`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+                const {
+                    entities: { chats },
+                    result,
+                } = normalize(response.data.chats, schemas.chats);
+                console.log("Success retrieving chats", response);
+                yield put(actions.completeFetchingChats(chats, result));
+            } else {
+                const { message } = yield response.json();
+                yield put(actions.failFetchingChats(message));
+            }
         } else {
-            const { message } = yield response.json();
-            yield put(actions.failFetchingChats(message));
+            yield put(actions.failFetchingChats("You are not authenticated..."));
         }
     } catch (error) {
-        //yield console.log(message);
+        console.log(error);
         yield put(actions.failFetchingChats('CONNECTION FAILED'));
     }
 }
 
 export function* watchFetchStarted() {
     yield takeEvery(types.CHATS_FETCH_STARTED, fetchChats);
+}
+
+// Active Chat
+function* fetchActiveChat(action) {
+    try {
+        const isAuth = yield select(selectors.isAuthenticated)
+        if(isAuth) {
+            const token = yield select(selectors.getAuthToken)
+            const { id } = action.payload;
+    
+            const response = yield call(axios.get, `${API_BASE_URL}/chat/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+
+                const data = yield response.data;
+                const activeChat = {
+                    id: data["chat_id"],
+                    encryptedSymKey : data["enc_sym_key"],
+                    receiver: data["other_user"],
+                    sender: data["username"],
+                    idSender: data["user_id"]
+                }
+
+                const historicalMessages = data["messages"] 
+                //console.log("Result active chat messages: ", historicalMessages)
+
+                const {
+                    entities: { messages },
+                    result,
+                } = normalize(historicalMessages, schemas.chats);
+                //console.log("Success retrieving chats", chats, result);
+                yield put(actions.completeFetchingActiveChat(activeChat));
+                yield put(messageActions.completeFetchingMessages(messages, result))
+            } else {
+                const { message } = yield response.json();
+                yield put(actions.failFetchingChats(message));
+            }
+        } else {
+            yield put(actions.failFetchingChats("You are not authenticated..."));
+        }
+    } catch (error) {
+        console.log(error);
+        yield put(actions.failFetchingChats('CONNECTION FAILED'));
+    }
+}
+
+export function* watchFetchActiveChatStarted() {
+    yield takeEvery(types.ACTIVE_CHAT_FETCH_STARTED, fetchActiveChat);
 }
 
 function* createChat(action) {

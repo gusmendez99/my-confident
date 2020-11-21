@@ -59,3 +59,23 @@ export const failDeletingChat = (chatId, error) => ({
         error
     }
 });
+
+// For active chat
+export const startFetchingActiveChat = (id) =>({
+    type: types.ACTIVE_CHAT_FETCH_STARTED,
+    payload: { id }
+});
+
+export const completeFetchingActiveChat = chat =>({
+    type: types.ACTIVE_CHAT_FETCH_COMPLETED,
+    payload: {
+        chat
+    },
+});
+
+export const failFetchingActiveChat = error => ({
+    type: types.ACTIVE_CHAT_FETCH_FAILED,
+    payload: {
+        error
+    }
+});

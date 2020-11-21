@@ -68,48 +68,13 @@ const order = (state = [], action) => {
     }
 };
 
-const isFetching = (state = false, action) =>{
-    switch(action.type) {
-        case types.MESSAGES_FETCH_COMPLETED:
-        case types.MESSAGES_FETCH_FAILED: {
-            return false;
-        }
-        case types.MESSAGES_FETCH_STARTED:{
-            return true;
-        }
-        default:
-            return state;
-    }
-};
-
-const error = (state = null, action) => {
-    switch(action.type) {
-        case types.MESSAGES_FETCH_COMPLETED:
-        case types.MESSAGES_FETCH_STARTED:
-        case types.MESSAGE_ADD_STARTED:
-        case types.MESSAGE_ADD_COMPLETED: {
-            return null;
-        }
-        case types.MESSAGES_FETCH_FAILED:
-        case types.MESSAGE_ADD_FAILED: {
-            return action.payload.error;
-        }
-        default:
-            return state;       
-    }
-}
 
 const messages = combineReducers ({
     byId,
     order,
-    isFetching,
-    error
 });
 
 export default messages
 
 export const getMessage = (state, id) => state.byId[id];
-export const getChatMessages = (state, chat_id) => filter(state.byId, msg => msg.chat_id === chat_id);
-export const getAllMessages = state => state.order.map(id => getChatMessages(state,id));
-export const isFetchingMessages = state => state.isFetching;
-export const getError = state => state.error;
+export const getActiveChatMessages = (state) =>  state.order.map(id => getMessage(state, id));
