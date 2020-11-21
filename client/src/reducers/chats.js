@@ -42,6 +42,7 @@ const byId =(state = {}, action) =>{
                 ...chat,
                 isConfirmed: true
             }
+            return newState;
         }
         case types.CHAT_DELETE_STARTED:{
             return omit(state, action.payload.chatId)

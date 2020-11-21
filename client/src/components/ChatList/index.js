@@ -16,8 +16,8 @@ const ChatList = ({ handleSelectChat, isFetching, chats, onLoad, selectedChat}) 
     return (
         <main className="mw6 left">
             {
-            isFetching ? <h1>Loading ...</h1> : chats.map(chat => (
-                <Chat key={chat.id} chat={chat} onView={handleSelectChat} isSelected={selectedChat === chat.id}/>
+            isFetching ? <h1>Loading ...</h1> : chats.map((chat, index) => (
+                <Chat key={index} chat={chat} onView={handleSelectChat} isSelected={selectedChat === chat.id}/>
             ))}        
         </main>
     )
