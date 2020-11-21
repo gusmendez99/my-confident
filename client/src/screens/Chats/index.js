@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import ChatList from "../../components/ChatList";
+import Search from "../../components/Search";
 import Chat from "../Chat";
 import { connect } from 'react-redux';
 
@@ -19,6 +20,7 @@ const handleSelectChat = (id) => {
 
 return (
     <div className="mw9 center ph3-ns">
+            <Search />  
             <div className="fl w-50 pa2">
                 <h1>Mis chats</h1>
                 <ChatList handleSelectChat={handleSelectChat} selectedChat={selectedChat}/> 

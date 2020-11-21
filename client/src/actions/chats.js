@@ -19,9 +19,12 @@ export const failFetchingChats = error => ({
     }
 });
 
-export const startAddingChat = chat =>({
+export const startAddingChat = (id,chat) =>({
     type: types.CHAT_ADD_STARTED,
-    payload: {chat}
+    payload: {
+        id, 
+        chat
+    }
 });
 
 export const completeAddingChat = (oldId, chat) =>({
