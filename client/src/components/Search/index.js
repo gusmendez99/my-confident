@@ -21,8 +21,7 @@ const Search = ({ onCreate, token }) => {
         changeUser(chips);
         axios.get(`${API_BASE_URL}public-key?receiver-username=${chips[0]}`, {
             headers: {
-                //'Authorization': token,
-                'Authorization': tk,
+                'Authorization': `Bearer ${token}`,
                 }
         })
             .then(response => changeChatData({...response.data, username: chips[0]}))
@@ -30,9 +29,10 @@ const Search = ({ onCreate, token }) => {
     }
 
     const handleCreateChat = () => {
-        if(user[0] !== undefined){
+        if(user[0]){
             onCreate(chatData);
         }
+        changeUser([]);
     }
 
     return (
@@ -46,8 +46,7 @@ const Search = ({ onCreate, token }) => {
                         axios.get(`${API_BASE_URL}user/find-all?term=${value}`, 
                             {
                                 headers: {
-                                'Authorization': tk
-                                //'Authorization': token
+                                    'Authorization': `Bearer ${token}`,
                                 }
                             })
                             .then(function (response) {
@@ -73,16 +72,13 @@ const Search = ({ onCreate, token }) => {
     );
 }
 
-
-export default Search;
-
-// export default connect(
-//     state => ({
-//         token: selectors.getAuthToken(state),
-//     }),
-//     dispatch => ({
-//         onCreate (chat) {
-//             dispatch(actions.startAddingChat(uuidv4(),chat))
-//         }
-//     }),
-// )(Search);
+export default connect(
+    state => ({
+        token: selectors.getAuthToken(state),
+    }),
+    dispatch => ({
+        onCreate (chat) {
+            dispatch(actions.startAddingChat(uuidv4(),chat))
+        }
+    }),
+)(Search);

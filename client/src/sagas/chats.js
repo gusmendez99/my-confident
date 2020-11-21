@@ -13,7 +13,7 @@ import { normalize, schema } from 'normalizr';
 import * as schemas from '../schemas/chats';
 
 import * as messageActions from '../actions/messages';
-import { getDataToCreateChat } from '../utils/chat';
+import * as chatUtils from '../utils/chat';
 
 const API_BASE_URL = 'http://localhost:5000/api/v1';
 
@@ -107,54 +107,6 @@ export function* watchFetchActiveChatStarted() {
     yield takeEvery(types.ACTIVE_CHAT_FETCH_STARTED, fetchActiveChat);
 }
 
-function* createChat(action) {
-    const oldId = action.payload.id;
-    try{
-        const { username,
-                sender_public_key, 
-                receiver_public_key } = action.payload.chat;
-        const isAuth = yield select(selectors.isAuthenticated)
-        if(isAuth){
-            const token = yield select(selectors.getAuthToken)
-            const data = getDataToCreateChat(username, sender_public_key, receiver_public_key);
-            const response = yield call(
-                fetch,
-                `${API_BASE_URL}/chat/create`,
-                {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers:{
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                    },
-                }
-            );
-
-            if(response.status >= 200 && response.status <= 300){
-                const jsonResult = yield response.json();
-                yield put(
-                    actions.completeAddingChat(
-                        oldId,
-                        response.data.chat_id,
-                    ),
-                );
-            } else{
-                console.log('ERROR');
-                yield put(actions.failAddingChat(oldId, "ERROR CREATING CHAT"))
-            }
-        }
-    } catch (error){
-        console.log("ERROR", error);
-        yield put(actions.failAddingChat(oldId, error));
-    }
-}
-
-export function* watchChatAdded(){
-    yield takeEvery(
-        types.CHAT_ADD_STARTED,
-        createChat,
-    )
-}
 
 function* deleteChat(action){
     try{
@@ -189,5 +141,59 @@ export function* watchChatDeleted(){
     yield takeEvery(
         types.CHAT_DELETE_STARTED,
         deleteChat,
+    )
+}
+
+
+function* createChat(action) {
+    const oldId = action.payload.id;
+    const { username,
+            sender_public_key, 
+            receiver_public_key } = action.payload.chat;
+    const data = yield chatUtils.getDataToCreateChat(username, sender_public_key, receiver_public_key);
+    try{
+        const isAuth = yield select(selectors.isAuthenticated);
+        if(isAuth){
+            const token = yield select(selectors.getAuthToken)
+            const response = yield call(
+                axios.post,
+                `${API_BASE_URL}/chat/create`,
+                JSON.stringify(data),
+                {
+                    headers:{
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if(response.status >= 200 && response.status <= 300){
+                console.log("Este es el chat", response.data.chat_id);
+                const chat = {
+                    id: response.data.chat_id,
+                    user1_sk_sym: data.sk_sym_1,
+                    user2_sk_sym: data.sk_sym_2,
+                    dt:'few moments',
+                    last_message_dt: "",
+                    user1_name: data.receiver_username,
+                    user2_name: data.receiver_username,
+                }
+                yield put(actions.completeAddingChat(oldId, chat));
+
+            } else{
+                console.log('ERROR');
+                yield put(actions.failAddingChat(oldId, "ERROR CREATING CHAT"))
+            }
+        }
+    } catch (error){
+        console.log("ERROR", error);
+        yield put(actions.failAddingChat(oldId, error));
+    }
+}
+
+export function* watchChatAdded(){
+    yield takeEvery(
+        types.CHAT_ADD_STARTED,
+        createChat,
     )
 }
