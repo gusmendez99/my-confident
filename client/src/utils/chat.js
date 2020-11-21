@@ -1,6 +1,6 @@
 import sjcl from "sjcl";
 
-const getDataToCreateChat = (username, senderPublicKey, receiverPublicKey) => {
+export const getDataToCreateChat = (username, senderPublicKey, receiverPublicKey) => {
 	// public key must be valid to create a new chat
 	// validate if sender.pk and receiver.pk are not null
 
@@ -33,7 +33,7 @@ const getDataToCreateChat = (username, senderPublicKey, receiverPublicKey) => {
 	return data;
 };
 
-const computeSymmetrycalKey = (username, encryptedSymmetricalKey) => {
+export const computeSymmetrycalKey = (username, encryptedSymmetricalKey) => {
 	const secretSerialized = JSON.parse(sessionStorage.getItem(username))['secret_key']
 	// Unserialize private key
 	const secretUnserialized = new sjcl.ecc.elGamal.secretKey(

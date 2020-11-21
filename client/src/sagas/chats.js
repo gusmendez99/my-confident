@@ -11,11 +11,13 @@ import * as actions from '../actions/chats';
 import * as types from '../types/chats';
 import { normalize, schema } from 'normalizr';
 import * as schemas from '../schemas/chats';
+import { getDataToCreateChat } from '../utils/chat';
 
 const API_BASE_URL = 'http://localhost:5000/api/v1';
 
 function* fetchChats(action) {
     console.log("si entreo")
+    //const token = yield select(selectors.getAuthToken);
     const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDU0NjI2NTMsImV4cCI6MTYwNTQ2MjcxMywianRpIjoiZjM5OWI5MDAtNjIyYy00OTE5LWIxMjEtMTM2MTljNTNmYzlkIiwiaWQiOjIsInJscyI6IiIsInJmX2V4cCI6MTYwNTQ2Mjk1M30.4ziufY5unUTL_UZcFekgGVc4H5ZAYsR8hYgphjIoWZ0";
     try {
         const response = yield call(axios.get, `${API_BASE_URL}/chats`, {
@@ -48,16 +50,19 @@ export function* watchFetchStarted() {
 function* createChat(action) {
     const oldId = action.payload.id;
     try{
+        const { username,
+                sender_public_key, 
+                receiver_public_key } = action.payload.chat;
         const isAuth = yield select(selectors.isAuthenticated)
-
         if(isAuth){
             const token = yield select(selectors.getAuthToken)
+            const data = getDataToCreateChat(username, sender_public_key, receiver_public_key);
             const response = yield call(
                 fetch,
                 `${API_BASE_URL}/chat/create`,
                 {
                     method: 'POST',
-                    body: JSON.stringify(action.payload),
+                    body: JSON.stringify(data),
                     headers:{
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`,
@@ -70,7 +75,7 @@ function* createChat(action) {
                 yield put(
                     actions.completeAddingChat(
                         oldId,
-                        jsonResult,
+                        response.data.chat_id,
                     ),
                 );
             } else{
