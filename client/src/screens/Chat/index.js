@@ -7,6 +7,7 @@ import sjcl from 'sjcl'
 import MessageList from "../../components/MessageList";
 
 import * as selectors from "../../reducers";
+import * as chatUtils from "../../utils/chat";
 import {
 	startAddingMessage,
 	completeAddingMessage,
@@ -14,9 +15,10 @@ import {
 
 import "./styles.css";
 
-const Chat = ({ messages, sender, activeChat, isFetchingActiveChat, symmetricKey }) => {
+const Chat = ({ messages, sender, activeChat, isFetchingActiveChat }) => {
 
-  /*
+	const [symmetricKey, setSymmetricKey] = useState(null);
+  
 	useEffect(() => {
     const socket = socketIOClient(`${API_BASE_URL}/chat`);
 		socket.on("connect", () => {
@@ -33,24 +35,25 @@ const Chat = ({ messages, sender, activeChat, isFetchingActiveChat, symmetricKey
 			const datetime = data["dt"];
 
       // TODO: make symmetric key part of our Redux State
-      if (!symmetric_key) {
-				computeSymmetricKey();
+      if (!symmetricKey) {
+				const newSymmetricKey = chatUtils.computeSymmetrycalKey();
+				setSymmetricKey(newSymmetricKey);
 			}
-			decryptedMessage = sjcl.decrypt(symmetricKey, message);
+			const decryptedMessage = sjcl.decrypt(symmetricKey, message);
 
 			if (currentSender == sender) {
 				// Do update pairs
-				processReceivedMessage(idMessage, message, isSender);
+				processReceivedMessage(idMessage, message, true);
 			} else if (currentSender == receiver) {
 				// Message processing for search protocol
-				processReceivedMessage(idMessage, message, isSender);
+				processReceivedMessage(idMessage, message, false);
 			}
     });
     
     // CLEAN UP THE EFFECT
     return () => socket.disconnect();
   }, []);
-  */
+  
 
 	const sendMessage = () => {
     // TODO: send message
