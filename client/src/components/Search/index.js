@@ -1,16 +1,38 @@
 import React, { useState } from 'react';
 
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
+
 import { API_BASE_URL } from '../../configuration';
+import * as selectors from '../../reducers';
+import * as actions from '../../actions/chats';
 
 import Chips, { Chip } from 'react-chips';
 
-const Search = () => {
+const tk = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDU5MzAxMjMsImV4cCI6MTYwNTkzMDQyMywianRpIjoiNDZlYmM4ZTctMTE2Yy00MWQ2LThkMTgtMjdkMGQxODIwNTdlIiwiaWQiOjEsInJscyI6IiIsInJmX2V4cCI6MTYwNTkzMDQyM30.xoBYsY-L56BiuVhAiTMdxHEY63ycG4kMEOQ-4J9QT7c"
+
+const Search = ({ onCreate, token }) => {
     
     const [user, changeUser] = useState([]);
+    const [chatData, changeChatData] = useState({});
 
-    const handleChangeUser = chips => {
+    const handleChangeUser = async chips => {
         changeUser(chips);
+        axios.get(`${API_BASE_URL}public-key?receiver-username=${chips[0]}`, {
+            headers: {
+                //'Authorization': token,
+                'Authorization': tk,
+                }
+        })
+            .then(response => changeChatData({...response.data, username: chips[0]}))
+            .catch(error => console.log(error))
+    }
+
+    const handleCreateChat = () => {
+        if(user[0] !== undefined){
+            onCreate(chatData);
+        }
     }
 
     return (
@@ -24,7 +46,8 @@ const Search = () => {
                         axios.get(`${API_BASE_URL}user/find-all?term=${value}`, 
                             {
                                 headers: {
-                                'Authorization': `Bearer ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDU4NTQzOTksImV4cCI6MTYwNTg1NDY5OSwianRpIjoiNTY5Mjk3NTEtZTYwNi00NjdhLTg1ZDAtNjNhNGQxMjIzZmRhIiwiaWQiOjEsInJscyI6IiIsInJmX2V4cCI6MTYwNTg1NDY5OX0.8Hh2zVEwl71uqRSjSLs8gOeUCc600tCVziopQM2LgHs"}`
+                                'Authorization': tk
+                                //'Authorization': token
                                 }
                             })
                             .then(function (response) {
@@ -35,8 +58,8 @@ const Search = () => {
                 />
                 
                     <button
-                        
                         disabled={user.length <= 0 || user.length >= 2}
+                        onClick={handleCreateChat}
                     >
                         Create
                     </button>
@@ -50,4 +73,16 @@ const Search = () => {
     );
 }
 
+
 export default Search;
+
+// export default connect(
+//     state => ({
+//         token: selectors.getAuthToken(state),
+//     }),
+//     dispatch => ({
+//         onCreate (chat) {
+//             dispatch(actions.startAddingChat(uuidv4(),chat))
+//         }
+//     }),
+// )(Search);
