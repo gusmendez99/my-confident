@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 
 import * as selectors from '../../reducers'
+import * as actions from '../../actions/chats';
 
 const Chat = ({ chat, onDelete, onView, isSelected, isFetchingActiveChat }) => {
     //const create_date = new Date(chat.dt).toLocaleDateString();
@@ -19,7 +20,7 @@ const Chat = ({ chat, onDelete, onView, isSelected, isFetchingActiveChat }) => {
                 <div className="w-100 tr">
                     <button 
                         className="f6 button-reset bg-white ba b--black-10 dim pointer pv1 black-60" 
-                        onClick={onDelete}
+                        onClick={() => onDelete(chat.id)}
                         disabled={!chat.isConfirmed}
                     >
                         Delete
@@ -43,7 +44,9 @@ export default connect(
         activeChat: selectors.getActiveChat(state)
     }), 
     (dispatch) => ({
-        
+        onDelete(id) {
+            dispatch(actions.startDeletingChat(id));
+        }
     })
 
 )(Chat);

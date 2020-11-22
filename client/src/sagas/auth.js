@@ -15,7 +15,6 @@ function* signIn(action) {
   try {
     const { username, password } = action.payload;
     const credentials = yield authUtils.getSignInCryptoCredencials(username, password);
-
     const response = yield call(fetch, `${API_BASE_URL}/login`, {
       method: 'POST',
       body: JSON.stringify(credentials),

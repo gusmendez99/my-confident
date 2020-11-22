@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../actions/auth';
+import { useHistory } from "react-router-dom";
 
-function SignUp({onSignUp, onSelectSignIn}) {
+import * as actions from '../../actions/auth';
+import * as selectors from '../../reducers/index';
+
+function SignUp({onSignUp, isAuthenticated, authError, isAuthenticating}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const history = useHistory();
+
+  const updateHistory = (route) => {
+    history.push(`/${route}`);
+  }
+
+  useEffect(() => {
+    if (isAuthenticated){
+      updateHistory("my-chats");
+    }
+  }, [isAuthenticated]); 
+
   return (
     <main className="">
       <div className="measure center">
@@ -20,11 +36,19 @@ function SignUp({onSignUp, onSelectSignIn}) {
           </div>
         </fieldset>
         <div className="">
-          <button onClick={() => onSignUp(username, password)} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib">Sign Up </button>
+          <button onClick={() => {onSignUp(username, password)}} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib">Sign Up </button>
+          { authError && !isAuthenticating &&(
+            <div className="b ml2 red f6 dib">There has been an error, please try again</div>
+            )
+          }
+          {isAuthenticating &&(
+            <div className="b ml2 green f6 dib">Loading...</div>
+            )
+          }
         </div>
         <div className="lh-copy mt3 db">
           <span className="f6 dib">Already have an account? </span>
-          <button className="f6 dim outline-0 bn bg-transparent dib pointer">Sign in</button>
+          <button onClick={() => updateHistory("signin")} className="f6 dim outline-0 bn bg-transparent dib pointer">Sign in</button>
         </div>
       </div>
     </main>
@@ -32,7 +56,11 @@ function SignUp({onSignUp, onSelectSignIn}) {
 }
 
 export default connect(
-  undefined,
+  (state) => ({
+    isAuthenticated: selectors.isAuthenticated(state),
+    authError: selectors.getAuthError(state),
+    isAuthenticating: selectors.getIsAuthenticating(state),
+  }),
   (dispatch) => ({
     onSignUp(username, password) {
       dispatch(actions.startSignUp(username, password))

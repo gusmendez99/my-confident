@@ -66,7 +66,7 @@ const order = (state = [], action) => {
             return state.map(id => id === oldId? chat.id : id);
         }
         case types.CHAT_DELETE_STARTED:{
-            return state.filter(id => id !== action.payload.id);
+            return state.filter(id => id !== action.payload.chatId);
         }
         default:{
             return state
