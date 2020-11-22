@@ -13,6 +13,9 @@ const reducer = combineReducers({
 export default reducer;
 
 export const getAuthUser = (state) => authSelectors.getAuthUser(state.auth);
+export const getAuthUsername = (state) => authSelectors.getAuthUsername(state.auth);
+export const getAuthUserPublicKey = (state) => authSelectors.getAuthUserPublicKey(state.auth);
+export const getAuthUserSecretKey = (state) => authSelectors.getAuthUserSecretKey(state.auth);
 export const getIsAuthenticating = (state) =>
 	authSelectors.getIsAuthenticating(state.auth);
 export const getAuthError = (state) => authSelectors.getAuthError(state.auth);
@@ -25,6 +28,7 @@ export const isFetchingChats = state => chatSelectors.isFetchingChats(state.chat
 export const isFetchingActiveChat = state => chatSelectors.isFetchingActiveChat(state.chats);
 export const getActiveChat = state => chatSelectors.getActiveChat(state.chats);
 export const getChatError = state => chatSelectors.getError(state.chats);
+export const getSymmetricKey = state => chatSelectors.getSymmetricKey(state.chats);
 
 export const getMessage = (state, id) => messageSelectors.getMessage(state.messages, id);
 export const getActiveChatMessages = (state) => messageSelectors.getActiveChatMessages(state.messages);

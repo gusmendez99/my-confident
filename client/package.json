@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postinstall": "cd node_modules/sjcl && ./configure --with-all && make sjcl.js"
+    "postinstall": "cd node_modules/sjcl && ./configure --with-ecc && make sjcl.js && make test"
   },
   "eslintConfig": {
     "extends": "react-app"

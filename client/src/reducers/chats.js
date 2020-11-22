@@ -96,6 +96,7 @@ const activeChat = (state = null, action) => {
         }
         case types.ACTIVE_CHAT_FETCH_COMPLETED: {
             const { chat } =  action.payload;
+            console.log("Chat is ", chat)
             return chat;
         }
         default: {
@@ -118,6 +119,16 @@ const isFetchingChat = (state = false, action) => {
             return state;
 
 
+    }
+}
+
+const symmetricKey = (state = null, action) => {
+    switch(action.type) {
+        case types.SET_SYMMETRIC_KEY: {
+            return action.payload.key
+        }
+        default:
+            return state;
     }
 }
 
@@ -150,7 +161,8 @@ const chats = combineReducers ({
     activeChat,
     isFetching,
     isFetchingChat,
-    error
+    error,
+    symmetricKey
 });
 
 export default chats
@@ -161,3 +173,5 @@ export const getActiveChat = state => state.activeChat;
 export const isFetchingChats = state => state.isFetching;
 export const isFetchingActiveChat = state => state.isFetchingChat;
 export const getError = state => state.error;
+
+export const getSymmetricKey = state => state.symmetricKey;

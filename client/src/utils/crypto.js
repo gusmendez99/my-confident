@@ -56,42 +56,51 @@ export const encodeEntry = (key, w, id, cnt) => {
 	};
 };
 
-export const produceEncodedPairList = (key, id, message, chatId, username) => {
+export const produceEncodedPairList = (key, id, message, idChat) => {
 	const keywordList = getKeywords(message);
 	const encodedPairList = [];
-	let userData = JSON.parse(sessionStorage.getItem(username));
+	const userKeywords = {}
 
 	keywordList.forEach((keyword, index, array) => {
-		const safeKeyword = "keyword-" + chatId + "-" + keyword;
-		let keywordCount = userData[safeKeyword];
+		const safeKeyword = "keyword-" + idChat + "-" + keyword;
+		let keywordCount = userKeywords[safeKeyword];
 
 		if (keywordCount == null) {
 			keywordCount = 1;
 		} else {
 			keywordCount = parseInt(keywordCount) + 1;
 		}
-		userData[safeKeyword] = keywordCount;
+		userKeywords[safeKeyword] = keywordCount;
 
 		// Update document count for keyword.
 		const encodedPair = encodeEntry(key, keyword, id, keywordCount);
 		encodedPairList.push(encodedPair);
+		
+		const data = {
+			encodedPairList,
+			userKeywords
+		}
+
+		return data
 	});
 
-	sessionStorage.setItem(username, JSON.stringify(userData));
+	//sessionStorage.setItem(username, JSON.stringify(userData));
+	// TODO: save userKerwords in Redux state
 	return encodedPairList;
 };
 
-export const processMessage = (key, id, message, chatId, updatePairs) => {
+export const processMessage = (key, id, message, idChat, updatePairs) => {
 	// Extracts encoded pair list from message
-	const encodedPairList = produceEncodedPairList(key, id, message, chatId);
+	const { encodedPairList, userKeywords } = produceEncodedPairList(key, id, message, idChat);
 
 	if (updatePairs) {
 		// Request data to use in API call with uri: '/update/pairs'
-		const requestData = {
-			pairs: JSON.stringify(encodedPairList),
+		const data = {
+			pairs: encodedPairList,
+			userKeywords
 		};
 
-		return requestData;
+		return data;
 	}
 	return null;
 };

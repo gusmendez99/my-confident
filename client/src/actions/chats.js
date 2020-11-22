@@ -79,3 +79,11 @@ export const failFetchingActiveChat = error => ({
         error
     }
 });
+
+// Symmetric Key generation
+export const setSymmetricKey = key => ({
+    type: types.SET_SYMMETRIC_KEY,
+    payload: {
+        key
+    }
+})

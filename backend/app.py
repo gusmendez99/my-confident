@@ -25,7 +25,7 @@ app.config.from_object(os.environ["APP_SETTINGS"])
 # Cors, Guardian and other config
 cors = CORS(app)
 guard = Praetorian(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins='*')
 db = SQLAlchemy(app)
 sslify = SSLify(app)
 
@@ -50,7 +50,6 @@ cors.init_app(app)
 db.init_app(app)
 guard.init_app(app, models.User, is_blacklisted=is_blacklisted)
 sslify.init_app(app)
-socketio.run(app)
 
 
 # Usernames must contain only letters (a-z), numbers (0-9), dashes (-), underscores (_)
@@ -310,7 +309,6 @@ def authenticated_only(f):
 
 
 @socketio.on("joined", namespace="/chat")
-@authenticated_only
 def joined(data):
     """
     Sent by clients when they enter a chat.
@@ -318,6 +316,7 @@ def joined(data):
     """
     # we hope that preview token auth is still saved in flask_pretorian
     # without passing an preatorian auth decorator here
+    print("User now is joined to chat", file=sys.stdout)
     username = current_user().username
     user_id = current_user().id
     chat_id = active_chats[user_id]
@@ -334,11 +333,11 @@ def joined(data):
 
 
 @socketio.on("new_message", namespace="/chat")
-@authenticated_only
 def new_message(data):
     """Sent by a client when the user entered a new message.
     The message is sent to both people in the chat."""
     message = data["msg"]
+    print("New received message bro! was {}".format(message), file=sys.stdout)
     username = current_user().username
     user_id = current_user().id
     chat_id = active_chats[user_id]
@@ -379,7 +378,6 @@ def new_message(data):
 
 
 @socketio.on("left", namespace="/chat")
-@authenticated_only
 def left(data):
     """Sent by clients when they leave a chat.
     A status message is broadcast to both people in the chat."""
@@ -400,3 +398,7 @@ def left(data):
     # Leave room and reset session variable for chat id
     leave_room(chat_id)
     active_chats[user_id] = None
+
+
+if __name__ == '__main__':
+    socketio.run(app)

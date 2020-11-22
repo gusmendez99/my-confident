@@ -9,15 +9,17 @@ export const getSignInCryptoCredencials = (username, password) => {
 };
 
 export const saveUserData = (username, password, data, isNewUser = false) => {
-	if (isNewUser && data) {
-		sessionStorage.setItem(username, data);
-	} else {
-		// This comes from Django user data
+	//if (isNewUser && data) {
+	//	return data
+	//} else {
+	if(data){	
+	// This comes from Django user data
 		const encryptedUserData = data.user_data;
 		const userData = sjcl.decrypt(password, encryptedUserData);
 		// TODO: evaluate if it is a good idea to save this on session
-		sessionStorage.setItem(username, userData);
+		return JSON.parse(userData)
 	}
+	return null
 };
 
 export const getSignUpCryptoCredentials = (username, password) => {
@@ -31,6 +33,8 @@ export const getSignUpCryptoCredentials = (username, password) => {
 		publicKey.x.concat(publicKey.y)
 	);
 	const secretSerialized = sjcl.codec.base64.fromBits(secretKey);
+
+	console.log("Secret serialized is: ", secretSerialized)
 
 	const userData = {
 		username,
