@@ -5,9 +5,9 @@ export const startSignIn = (username, password) => ({
 	payload: { username, password },
 });
 
-export const completeSignIn = (data) => ({
+export const completeSignIn = (token, data) => ({
 	type: types.SIGN_IN_COMPLETED,
-	payload: { data },
+	payload: { token, data },
 });
 
 export const failSignIn = (error) => ({
@@ -20,9 +20,9 @@ export const startSignUp = (username, password) => ({
 	payload: { username, password },
 });
 
-export const completeSignUp = (data) => ({
+export const completeSignUp = (token, data) => ({
 	type: types.SIGN_UP_COMPLETED,
-	payload: { data },
+	payload: { token, data },
 });
 
 export const failSignUp = (error) => ({

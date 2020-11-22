@@ -28,7 +28,7 @@ function* signIn(action) {
       console.log("Result is: ", result)
       const userData = authUtils.saveUserData(username, password, result, false)
       console.log("User data is: ", userData)
-      yield put(actions.completeSignIn({ 'token': result.token, ...userData }));
+      yield put(actions.completeSignIn(result.token, userData));
     } else {
       const {message} = yield response.json();
       yield put(actions.failSignIn(message));
@@ -58,7 +58,7 @@ function* signUp(action) {
       console.log("Result is: ", result)
       const userData = authUtils.saveUserData(username, password, result, true)
       console.log("User data is: ", userData)
-      yield put(actions.completeSignUp({ 'token': result.token, ...userData }));
+      yield put(actions.completeSignUp(result.token, userData));
     } else if (response.status >= 300 && response.status <= 600) {
         yield put(actions.failSignUp('User is already logged in'));
     } else {

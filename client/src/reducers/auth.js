@@ -13,7 +13,7 @@ const currentUser = (state = null, action) => {
 		}
 		case types.SIGN_IN_COMPLETED:
 		case types.SIGN_UP_COMPLETED: {
-			return action.payload.data.user_data;
+			return action.payload.data;
 		}
 		default:
 			return state;
@@ -31,7 +31,7 @@ const token = (state = null, action) => {
 		}
 		case types.SIGN_IN_COMPLETED:
 		case types.SIGN_UP_COMPLETED: {
-			return action.payload.data.token;
+			return action.payload.token;
 		}
 		default:
 			return state;
@@ -84,6 +84,10 @@ const auth = combineReducers({
 export default auth;
 
 export const getAuthUser = (state) => state.currentUser;
+export const getAuthUsername = (state) => getAuthUser(state) !== null ? getAuthUser(state)["username"] : null 
+export const getAuthUserPublicKey = (state) => getAuthUser(state) !== null ? getAuthUser(state)["public_key"] : null 
+export const getAuthUserSecretKey = (state) => getAuthUser(state) !== null ? getAuthUser(state)["secret_key"] : null 
+
 export const getIsAuthenticating = (state) => state.isAuthenticating;
 export const getAuthError = (state) => state.error;
 export const getAuthToken = (state) => state.token;
