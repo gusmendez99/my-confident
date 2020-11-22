@@ -1,8 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../actions/auth';
+import { useHistory } from "react-router-dom";
 
-const SignIn = ({onSignIn, onSelectSignUp}) => {
+
+import * as actions from '../../actions/auth';
+import * as selectors from '../../reducers/index';
+
+const SignIn = ({onSignIn, isAuthenticated, authError, isAuthenticating}) => {
+  const history = useHistory();
+
+  const updateHistory = (route) => {
+    history.push(`/${route}`);
+  }
+
+  useEffect(() => {
+    if (isAuthenticated){
+      updateHistory("my-chats");
+    }
+  }, [isAuthenticated]); 
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   return (
@@ -20,11 +36,19 @@ const SignIn = ({onSignIn, onSelectSignUp}) => {
           </div>
         </fieldset>
         <div className="">
-          <button onClick={() => onSignIn(username, password)} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib">Sign In </button>
+          <button onClick={() => {onSignIn(username, password)}} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib">Sign In </button>
+          { authError && !isAuthenticating &&(
+            <div className="b ml2 red f6 dib">There has been an error, please try again</div>
+            )
+          }
+          {isAuthenticating &&(
+            <div className="b ml2 green f6 dib">Loading...</div>
+            )
+          }
         </div>
         <div className="lh-copy mt3 db">
           <span className="f6 dib">Don't have an account? </span>
-          <button className="f6 dim outline-0 bn bg-transparent dib pointer">Sign up</button>
+          <button onClick={() => updateHistory("signup")} className="f6 dim outline-0 bn bg-transparent dib pointer">Sign up</button>
         </div>
       </div>
     </main>
@@ -32,7 +56,11 @@ const SignIn = ({onSignIn, onSelectSignUp}) => {
 }
 
 export default connect(
-  undefined,
+  (state) => ({
+    isAuthenticated: selectors.isAuthenticated(state),
+    authError: selectors.getAuthError(state),
+    isAuthenticating: selectors.getIsAuthenticating(state)
+  }),
   (dispatch) => ({
     onSignIn(username, password) {
       dispatch(actions.startSignIn(username, password))

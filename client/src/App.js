@@ -3,11 +3,14 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom";
-
+import { connect } from 'react-redux';
+import * as selectors from './reducers/index';
 
 import './App.css';
+
 import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
 import StartChat from './screens/StartChat';
@@ -15,12 +18,23 @@ import Chats from './screens/Chats';
 import Chat from './screens/Chat'
 import tachyons from 'tachyons';
 
-function App() {
+function App({isAuthenticated}) {
   return (
     <div className="vh-100 flex flex-column justify-center">
       <Router>
       <div>
         <Switch>
+          <Route
+            exact
+            path="/"
+            render={() => {
+                return (
+                  isAuthenticated ?
+                  <Redirect to="/my-chats" /> :
+                  <Redirect to="/signin" /> 
+                )
+            }}
+          />
           <Route path="/signin">
             <SignIn />
           </Route>
@@ -40,4 +54,10 @@ function App() {
   );
 }
 
-export default App;
+
+export default connect(
+  (state) => ({
+    isAuthenticated: selectors.isAuthenticated(state),
+  }),
+  undefined
+)(App);
