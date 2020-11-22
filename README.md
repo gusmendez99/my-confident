@@ -2,7 +2,7 @@
 
 End-to-end crypto chat, made with Flask and React
 
-## Backend
+## Web
 
 ### Installation
 
@@ -14,17 +14,17 @@ source venv/bin/activate
 
 Then, install Flask dependencies
 ```
-cd backend
+cd web
 pip3 install -r requirements.txt
 ```
 
-### Run API
+### Run API/Flask app
 
-First, set environment variables (`DATABASE_URL` must be replaced with your own database url)
+First, set environment variables (`DATABASE_URL` must be replaced with your own PostgreSQL database url).
 ```
 export FLASK_APP=app
 export FLASK_ENV=development
-export DATABASE_URL=/tmp/test.db
+DATABASE_URL='postgresql://YOUR_USER:YOUR_PASSWORD@HOST:PORT/DATABASE'
 export APP_SETTINGS=config.DevelopmentConfig
 ```
 
@@ -33,7 +33,7 @@ Then, run the following command
 flask run
 ```
 
-Finally, API will run on port `5000`
+Finally, API & App will run on port `5000`
 
 ### API Endpoints
 Endpoints list pending
@@ -59,20 +59,3 @@ Endpoints list pending
   * http://127.0.0.1:5000/api/v1/chat/1/update-pairs
 * Search
   * Not implemented
-
-## Frontend
-
-### Installation
-Install React dependencies
-```
-cd client
-yarn install
-```
-
-### Run
-Run the following command
-```
-yarn start 
-```
-
-Finally, React app will run on port `3000`
