@@ -13,8 +13,8 @@ const API_BASE_URL = 'http://localhost:5000/api/v1';
 
 function* signIn(action) {
   try {
-    const credentials = yield authUtils.getSignInCryptoCredencials(action.payload.username, action.payload.password);
-
+    const { username, password } = action.payload;
+    const credentials = yield authUtils.getSignInCryptoCredencials(username, password);
     const response = yield call(fetch, `${API_BASE_URL}/login`, {
       method: 'POST',
       body: JSON.stringify(credentials),
@@ -23,11 +23,11 @@ function* signIn(action) {
       },
     });
     if (response.status === 200) {
-      let userData = '';
-      yield response.json().then((data) => {
-        userData = data
-      })
-      yield put(actions.completeSignIn(userData));
+      const result = yield response.json();
+      console.log("Result is: ", result)
+      const userData = authUtils.saveUserData(username, password, result, false)
+      console.log("User data is: ", userData)
+      yield put(actions.completeSignIn(result.token, userData));
     } else {
       const {message} = yield response.json();
       yield put(actions.failSignIn(message));
@@ -41,9 +41,10 @@ export function* watchSignInStarted() {
   yield takeEvery(types.SIGN_IN_STARTED, signIn);
 }
 
-function* signup(action) {
+function* signUp(action) {
   try {
-    const credentials = yield authUtils.getSignUpCryptoCredentials(action.payload.username, action.payload.password)
+    const { username, password } = action.payload;
+    const credentials = yield authUtils.getSignUpCryptoCredentials(username, password)
     const response = yield call(fetch, `${API_BASE_URL}/sign-up`, {
       method: 'POST', 
       body: JSON.stringify(credentials),
@@ -52,11 +53,11 @@ function* signup(action) {
       },
     });
     if (response.status === 200) {
-      let userData = '';
-      yield response.json().then((data) => {
-        userData = data
-      })
-      yield put(actions.completeSignUp(userData));
+      const result = yield response.json();
+      console.log("Result is: ", result)
+      const userData = authUtils.saveUserData(username, password, result, true)
+      console.log("User data is: ", userData)
+      yield put(actions.completeSignUp(result.token, userData));
     } else if (response.status >= 300 && response.status <= 600) {
         yield put(actions.failSignUp('User is already logged in'));
     } else {
@@ -68,5 +69,5 @@ function* signup(action) {
 }
 
 export function* watchSignUpStarted() {
-  yield takeEvery(types.SIGN_UP_STARTED, signup);
+  yield takeEvery(types.SIGN_UP_STARTED, signUp);
 }

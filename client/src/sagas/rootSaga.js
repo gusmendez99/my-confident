@@ -1,6 +1,6 @@
 import {fork, all} from 'redux-saga/effects';
 
-import { watchFetchStarted, watchChatAdded, watchChatDeleted } from './chats';
+import { watchFetchStarted, watchChatAdded, watchChatDeleted, watchFetchActiveChatStarted } from './chats';
 import { watchSignUpStarted, watchSignInStarted } from './auth';
 
 function* rootSaga() {
@@ -10,6 +10,7 @@ function* rootSaga() {
         fork(watchFetchStarted),
         fork(watchChatAdded),
         fork(watchChatDeleted),
+        fork(watchFetchActiveChatStarted)
     ]);
 }
 

@@ -2,7 +2,6 @@ import omit from 'lodash/omit';
 import unionWith from 'lodash/unionWith';
 import union from 'lodash/union';
 import isEqual from 'lodash/isEqual';
-import filter from 'lodash/filter';
 
 import { combineReducers } from 'redux';
 
@@ -43,6 +42,7 @@ const byId =(state = {}, action) =>{
                 ...chat,
                 isConfirmed: true
             }
+            return newState;
         }
         case types.CHAT_DELETE_STARTED:{
             return omit(state, action.payload.chatId)
@@ -66,7 +66,7 @@ const order = (state = [], action) => {
             return state.map(id => id === oldId? chat.id : id);
         }
         case types.CHAT_DELETE_STARTED:{
-            return state.filter(id => id !== action.payload.id);
+            return state.filter(id => id !== action.payload.chatId);
         }
         default:{
             return state
@@ -88,16 +88,63 @@ const isFetching = (state = false, action) =>{
     }
 };
 
+const activeChat = (state = null, action) => {
+    switch(action.type){
+        case types.ACTIVE_CHAT_FETCH_FAILED:
+        case types.ACTIVE_CHAT_FETCH_STARTED: {
+            return null
+        }
+        case types.ACTIVE_CHAT_FETCH_COMPLETED: {
+            const { chat } =  action.payload;
+            console.log("Chat is ", chat)
+            return chat;
+        }
+        default: {
+            return state;
+        }
+    }
+}
+
+
+const isFetchingChat = (state = false, action) => {
+    switch(action.type) {
+        case types.ACTIVE_CHAT_FETCH_COMPLETED:
+        case types.ACTIVE_CHAT_FETCH_FAILED: {
+            return false;
+        }
+        case types.ACTIVE_CHAT_FETCH_STARTED: {
+            return true
+        }
+        default:
+            return state;
+
+
+    }
+}
+
+const symmetricKey = (state = null, action) => {
+    switch(action.type) {
+        case types.SET_SYMMETRIC_KEY: {
+            return action.payload.key
+        }
+        default:
+            return state;
+    }
+}
+
 const error = (state = null, action) => {
     switch(action.type) {
         case types.CHATS_FETCH_COMPLETED:
         case types.CHATS_FETCH_STARTED:
+        case types.ACTIVE_CHAT_FETCH_STARTED:
         case types.CHAT_ADD_STARTED:
         case types.CHAT_ADD_COMPLETED:
         case types.CHAT_DELETE_STARTED:
-        case types.CHAT_DELETE_COMPLETED: {
+        case types.CHAT_DELETE_COMPLETED: 
+        case types.ACTIVE_CHAT_FETCH_COMPLETED: {
             return null;
         }
+        case types.ACTIVE_CHAT_FETCH_FAILED:
         case types.CHATS_FETCH_FAILED:
         case types.CHAT_ADD_FAILED:
         case types.CHAT_DELETE_FAILED:{
@@ -109,16 +156,22 @@ const error = (state = null, action) => {
 }
 
 const chats = combineReducers ({
-
     byId,
     order,
+    activeChat,
     isFetching,
-    error
+    isFetchingChat,
+    error,
+    symmetricKey
 });
 
 export default chats
 
 export const getChat = (state, id) => state.byId[id];
 export const getAllChats = state => state.order.map(id => getChat(state,id));
+export const getActiveChat = state => state.activeChat;
 export const isFetchingChats = state => state.isFetching;
+export const isFetchingActiveChat = state => state.isFetchingChat;
 export const getError = state => state.error;
+
+export const getSymmetricKey = state => state.symmetricKey;

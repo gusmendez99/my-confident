@@ -19,9 +19,12 @@ export const failFetchingChats = error => ({
     }
 });
 
-export const startAddingChat = chat =>({
+export const startAddingChat = (id,chat) =>({
     type: types.CHAT_ADD_STARTED,
-    payload: {chat}
+    payload: {
+        id, 
+        chat
+    }
 });
 
 export const completeAddingChat = (oldId, chat) =>({
@@ -56,3 +59,31 @@ export const failDeletingChat = (chatId, error) => ({
         error
     }
 });
+
+// For active chat
+export const startFetchingActiveChat = (id) =>({
+    type: types.ACTIVE_CHAT_FETCH_STARTED,
+    payload: { id }
+});
+
+export const completeFetchingActiveChat = chat =>({
+    type: types.ACTIVE_CHAT_FETCH_COMPLETED,
+    payload: {
+        chat
+    },
+});
+
+export const failFetchingActiveChat = error => ({
+    type: types.ACTIVE_CHAT_FETCH_FAILED,
+    payload: {
+        error
+    }
+});
+
+// Symmetric Key generation
+export const setSymmetricKey = key => ({
+    type: types.SET_SYMMETRIC_KEY,
+    payload: {
+        key
+    }
+})

@@ -9,6 +9,7 @@
     "axios": "^0.21.0",
     "normalizr": "^3.6.1",
     "react": "^16.14.0",
+    "react-chips": "^0.8.0",
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
@@ -17,6 +18,7 @@
     "redux-persist": "^6.0.0",
     "redux-saga": "^1.1.3",
     "sjcl": "https://github.com/bitwiseshiftleft/sjcl/tarball/master",
+    "socket.io-client": "^3.0.3",
     "tachyons": "^4.12.0",
     "uuid": "^8.3.1"
   },
@@ -25,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postinstall": "cd node_modules/sjcl && ./configure --with-all && make sjcl.js"
+    "postinstall": "cd node_modules/sjcl && ./configure --with-ecc && make sjcl.js && make test"
   },
   "eslintConfig": {
     "extends": "react-app"
