@@ -14,7 +14,6 @@ const API_BASE_URL = 'http://localhost:5000/api/v1';
 function* signIn(action) {
   try {
     const credentials = yield authUtils.getSignInCryptoCredencials(action.payload.username, action.payload.password);
-
     const response = yield call(fetch, `${API_BASE_URL}/login`, {
       method: 'POST',
       body: JSON.stringify(credentials),
