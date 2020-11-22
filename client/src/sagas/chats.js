@@ -19,7 +19,6 @@ const API_BASE_URL = 'http://localhost:5000/api/v1';
 
 function* fetchChats(action) {
     //const token = yield select(selectors.getAuthToken);
-
     try {
         const isAuth = yield select(selectors.isAuthenticated)
         if(isAuth) {
