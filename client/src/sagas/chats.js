@@ -129,11 +129,11 @@ function* deleteChat(action){
                     actions.completeDeletingChat(),
                 );
             } else{
-                yield put(actions.failDeletingChat(action.payload.id, "Error deleting Chat"))
+                yield put(actions.failDeletingChat(action.payload.chatId, "Error deleting Chat"))
             }
         }
     }catch(error){
-        yield put(actions.failDeletingChat(action.payload.id, error));
+        yield put(actions.failDeletingChat(action.payload.chatId, error));
     }
 }
 
