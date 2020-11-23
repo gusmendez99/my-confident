@@ -5,16 +5,21 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+
         <title>
             {% block title %}My Confident{% endblock %}
         </title>
 
         <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
-
+       <!--Fonts--> 
+       <link rel="preconnect" href="https://fonts.gstatic.com">
+       <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,300&display=swap" rel="stylesheet"> 
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <link href="{{ url_for('static', filename='styles/main.css') }}" rel="stylesheet">
+        
         <script type=text/javascript>
             $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
         </script>
