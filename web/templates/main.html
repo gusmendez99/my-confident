@@ -11,7 +11,6 @@
 
         <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
 
-
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -24,36 +23,24 @@
     </head>
     <body>
         {% block nav %}
-            <nav class="navbar navbar-default navbar-fixed-top">
-                <div class="container">
-                    <div class="f2 b navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        {% if not 'user' in session %}
-                            <a class="navbar-brand" href="{{ url_for('home') }}">My Confident</a>
-                        {% else %}
-                            <a class="navbar-brand" href="{{ url_for('home') }}">Welcome to My Confident, {{session['user']['username']}}!</a>
-                        {% endif %}
-                        
-                    </div>
-                    <div id="navbar" class="f3 navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li><a href="{{ url_for('home') }}">Home</a></li>
-                            <li><a href="{{ url_for('about') }}">About</a></li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                        {% if not 'logged_in' in session %}
-                            <script>sessionStorage.clear();</script>
-                            <li><a href="{{ url_for('login') }}">Login</a></li>
-                        {% else %}
-                            <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                        {% endif %}
-                        </ul>
-                    </div><!--/.nav-collapse -->
+
+            <nav class="flex justify-between bb b--white-10p bg-black mb5 pv3">
+                <div class="flex justify-between items-center">
+                    {% if not 'user' in session %}
+                        <a class="f4 link dib white dim mh3 mr4-ns" href="{{ url_for('home') }}">MyConfident</a>
+                    {% else %}
+                        <a class="f4 link dib white dim mh3 mr4-ns" href="{{ url_for('home') }}">Hi, {{session['user']['username']}}!</a>
+                    {% endif %}
+                </div>
+                <div id="navbar" class="flex justify-between items-center">
+                    <a class="f6 link dib white dim mr3 mr4-ns" href="{{ url_for('home') }}">Home</a>
+                    <a class="f6 link dib white dim mr3 mr4-ns" href="{{ url_for('about') }}">About</a>
+                    {% if not 'logged_in' in session %}
+                        <script>sessionStorage.clear();</script>
+                        <a class="f6 link dib white dim mr3 mr4-ns" href="{{ url_for('login') }}">Login</a>
+                    {% else %}
+                        <a class="f6 link dib white dim mr3 mr4-ns" href="{{ url_for('logout') }}">Logout</a>
+                    {% endif %}
                 </div>
             </nav>
         {% endblock %}
