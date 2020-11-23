@@ -1,89 +1,87 @@
 {% extends "main.html" %}
 
-{% block title %}Messengr | Chat{% endblock %}
+{% block title %}My Confident | Chat{% endblock %}
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='scripts/chat/message_utils.js') }}"></script>
 <script src="{{ url_for('static', filename='scripts/chat/crypto_utils.js') }}"></script>
 <script src="{{ url_for('static', filename='scripts/chat/chat.js') }}"></script>
 <script>
-    var ENCRYPTED_SYM_KEY = {{enc_sym_key|tojson|safe}};
+    var ENCRYPTED_SYM_KEY = '{{enc_sym_key|tojson|safe}}';
     var CURRENT_USERNAME = '{{username}}';
 </script>
 {% endblock%}
 
 {% block content %}
     
-    <div class="container">
+    <div class="flex pa6 justify-between items-center">
 
-        <div class="row" style="margin-left:10px;">
-            <h2>Messages</h2>
-            <button class="btn btn-primary btn-sm" id="leaveChat">Leave chat</button>
+        <div  style="margin-left:10px;">
+            <h1 class="b">Messages</h1>
+        </div>
+        <div>
+            <button class="f6 link dim br1 ph3 pv2 mb2 dib white bg-navy" id="leaveChat">Leave chat</button>
         </div>
 
-        <br><br>
-
-        <div class="row chat-window col-xs-5 col-md-12" style="margin-left:10px;">
-            <div class="col-xs-12 col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading top-bar">
-                        <div class="col-md-8 col-xs-8">
-                             <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> {{ other_user }}</h3>
-
-                        </div>
-                    </div>
-                    <div class="panel-body msg_container_base" id="chat_base">
-                        {% if messages %}
-                            {% for m in messages %}
-                                {% if m.sender_id == user_id %}
-                                    <div class="row msg_container base_sent">
-                                        <div class="col-md-10 col-xs-10">
-                                            <div class="messages msg_sent">
-                                                <p class="text-warning" data-id="{{m.id}}">{{ m.text }}</p>
-                                                <time datetime="{{ m.dt }}" class="">{{ m.sender_username }} • {{ m.dt }}</time>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 col-xs-2 avatar">
-                                            <img src="https://secure.gravatar.com/avatar/00000000000000000000000000000000?d=retro" height="100" width="100" class="img-responsive">
-                                        </div>
-                                    </div>
-                                {% endif %}
-                                {% if m.receiver_id == user_id %}
-                                    <div class="row msg_container base_receive">
-                                        <div class="col-md-2 col-xs-2 avatar">
-                                            <img src="https://secure.gravatar.com/avatar/00000000000000000000000000000000?d=retro" height="100" width="100" class="img-responsive">
-                                        </div>
-                                        <div class="col-md-10 col-xs-10">
-                                            <div class="messages msg_receive">
-                                                <p class="text-warning" data-id="{{m.id}}">{{ m.text }}</p>
-                                                <time datetime="{{ m.dt }}" class="">{{ m.sender_username }} • {{ m.dt }}</time>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            <p>No messages found.</p>
-                        {% endif %}
-                    </div>
-                    <div class="panel-footer">
-                        <div class="input-group">
-                            <input id="message" name="message" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." maxlength="250"> <span class="input-group-btn">
-                            <button class="btn btn-primary btn-sm" type="submit" id="send_message">Send</button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-10" style="margin-left:30px; margin-top:30px;">
-            <div class="input-group">
-                <input type="text" id="search_text" class="form-control" placeholder="Search for keyword...">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" id="search_keyword">Search!</button>
-                </span>
-            </div><!-- /input-group -->
-        </div><!-- /.col-lg-6 -->
     </div>
+
+                    <div class="flex">
+                        <div class="center">
+                                <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> {{ other_user }}</h3>
+                        </div>
+                    </div>
+                    <div class="flex center pa6 flex-column justify-center">
+                        <div class="overflow-auto h5 center">
+                            <ul class="list pl0 mt0 measure center">
+                                {% if messages %}
+                                    {% for m in messages %}
+                                        {% if m.sender_id == user_id %}
+                                            <li class="flex items-center lh-copy pa3 ph0-l bb b--black-10">
+                                                <div class="flex-auto tr pr3">
+                                                    <span>
+                                                        <strong>{{ m.sender_username }}</strong> • {{ m.dt }}
+                                                    </span>
+                                                    <p class="f6 db black-70" data-id="{{m.id}}">{{ m.text }}</p>
+                                                </div>
+                                                <div>
+                                                    <img src="https://secure.gravatar.com/avatar/00000000000000000000000000000000?d=retro" class="w2 h2 w3-ns h3-ns br-100 ma2">
+                                                </div>
+                                            </li>
+                                        {% endif %}
+                                        {% if m.receiver_id == user_id %}
+                                        <li class="flex items-center lh-copy pa3 ph0-l bb b--black-10">
+                                            <div>
+                                                <img src="https://secure.gravatar.com/avatar/00000000000000000000000000000000?d=retro" class="w2 h2 w3-ns h3-ns br-100 ma2">
+                                            </div>
+                                            <div class="flex-auto tr pr3">
+                                                <span>
+                                                    <strong>{{ m.sender_username }}</strong> • {{ m.dt }}
+                                                </span>
+                                                <p class="f6 db black-70" data-id="{{m.id}}">{{ m.text }}</p>
+                                            </div>
+                                        </li>                                
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No messages found.</p>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="flex flex-column justify-end">
+                            <form >
+                                    <label for="comment" class="f6 b db mb2">Send a new message</label>
+                                    <textarea id="comment" name="comment" class="db border-box hover-black w-100 measure ba b--black-20 pa2 br2 mb2" aria-describedby="comment-desc"></textarea>
+                                    <small id="comment-desc" class="f6 black-60">Remember: this is a <span class="b">secure</span> chat.</small>
+                                    <div class="mt3"><input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="Send"/></div>
+                                </form>
+                            </div>
+                        <div class="flex pa4 justify-start">
+                                <input type="text" id="search_text" class="form-control" placeholder="Search for keyword...">
+                                <span class="input-group-btn">
+                                    <button class="f6 link dim br1 ph3 pv2 mb2 dib white bg-dark-gray" type="button" id="search_keyword">Search!</button>
+                                </span>
+                        </div><!-- /.col-lg-6 -->
+                    </div>
+
 
 {% endblock %}

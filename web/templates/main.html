@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>
-            {% block title %}Messengr{% endblock %}
+            {% block title %}My Confident{% endblock %}
         </title>
 
         <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
@@ -19,10 +19,11 @@
             $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
         </script>
 
-        
+         
     </head>
     <body>
         {% block nav %}
+
             <nav class="flex justify-between bb b--white-10p bg-black mb5 pv3">
                 <div class="flex justify-between items-center">
                     {% if not 'user' in session %}
