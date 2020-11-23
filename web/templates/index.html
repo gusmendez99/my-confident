@@ -1,6 +1,6 @@
 {% extends "main.html" %}
 
-{% block title %}Messengr | Home{% endblock %}
+{% block title %}My Confident | Home{% endblock %}
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
@@ -13,62 +13,58 @@
 
 {% block content %}
 
-    <div class="container">
+<div class="flex pa6 pb6 justify-between items-center">
 
-        <div class="row">
-            <div class="col-md-4"><h2>Chats</h2></div>
-            <div class="col-md-4 col-md-offset-4">
-                {% if error %}
-                    <p class="text-danger">Error: {{ error }}</p>
-                {% endif %}
-                <div class="input-group">
-                    <input type="text" class="form-control" id="receiver" name="receiver" placeholder="Receiver username" class="form-control input-sm" maxlength="32"> <span class="input-group-btn">
-                    <button class="btn btn-primary" type="submit" id="new_chat">New Chat</button>
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <table class="table table-hover" style="margin: auto;">
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Chat created</th>
-                <th>Last message time</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-                {% if chats %}
-                    {% for c in chats %}
-                        <tr class="warning" id={{ c.id }}>
-                            {% if c.user1_name == username %}
-                                <td>{{ c.user2_name }}</td>
-                            {% elif c.user2_name == username %}
-                                <td>{{ c.user1_name }}</td>
-                            {% else %}
-                                <td>{{ username }}</td>
-                            {% endif%}
-                            <td>{{ c.dt }}</td>
-                            <td>{{ c.last_message_dt }}</td>
-                            <td>
-                                <form action="{{ url_for('delete_chat', id=c.id) }}" method="post">
-                                    <input class="btn btn-danger" type="submit" value="Delete">
-                                </form>
-                            </td>
-                        </tr> 
-                    {% endfor %}
-                {% else %}
-                    <tr class="danger">
-                        <td></td>
-                        <td>No chats found.</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                {% endif%}
-            </tbody>
-          </table>
-
+    <div>
+        <h1 class="b">My Chats</h1>
     </div>
+    <div>
+        {% if error %}
+        <p class="text-danger">Error: {{ error }}</p>
+        {% endif %}
+        <div class="flex items-center">
+            <input type="text" class="form-control" id="receiver" name="receiver" placeholder="Receiver username"
+                class="f6 f5-l input-reset bn fl black-80 bg-white pa3 lh-solid w-100 w-75-m w-80-l br2-ns br--left-ns"
+                maxlength="32"> <span class="input-group-btn">
+                <button class="f6 link dim br1 ph3 pv2 mb2 dib white bg-dark-green" type="submit" id="new_chat">New
+                    Chat</button>
+            </span>
+        </div>
+    </div>
+
+</div>
+<div>
+    <ul class="list h5 pa3 pl0 mt0 measure center overflow-auto">
+        {% if chats %}
+        {% for c in chats %}
+        <li id={{ c.id }} class="flex items-center lh-copy pa3 ph0-l bb b--black-10">
+            <img class="w2 h2 w3-ns h3-ns br-100" src="http://tachyons.io/img/avatar-mrmrs.jpg" />
+            {% if c.user1_name == username %}
+            <!-- para el titulo  -->
+            <div class="pl3 flex-auto">
+                <a href="{{ url_for('chat', id=c.id) }}" class="f1 fw6 db  navy link dim">{{ c.user2_name }}</a>
+                {% elif c.user2_name == username %}
+                <a href="{{ url_for('chat', id=c.id) }}" class="f1 fw6 db  navy link dim">{{ c.user1_name }}</a>
+                {% else %}
+                <a href="{{ url_for('chat', id=c.id) }}" class="f1 fw6 db  navy link dim">{{ username }}</a>
+                {% endif%}
+                <!-- <span class="f6 db black-70">{{ c.dt }}</span> -->
+                <span class="f3 db mid-gray">{{ c.last_message_dt }}</span>
+            </div>
+            <!-- para el boton -->
+            <div>
+                <form action="{{ url_for('delete_chat', id=c.id) }}" method="post">
+                    <input class="f6 link dim ba bw2 ph3 pv2 mb2 dib dark-pink" type="submit" value="&#10006">
+                </form>
+            </div>
+        </li>
+        {% endfor %}
+        {% else %}
+        <div>
+            <h2>No chats found.</h2>
+        </div>
+        {% endif%}
+    </ul>
+</div>
 
 {% endblock %}
