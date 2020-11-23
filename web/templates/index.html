@@ -13,62 +13,65 @@
 
 {% block content %}
 
-    <div class="container">
-
-        <div class="row">
-            <div class="col-md-4"><h2>Chats</h2></div>
-            <div class="col-md-4 col-md-offset-4">
+    <div class="flex justify-center items-start">
+        <div class="flex flex-column justify-start items-start mr5">
+            <div class="f3 fw6 ph0 mh0 self-center mb3">Start New Chat</div>
+            <div class="flex justify-center items-center">
                 {% if error %}
-                    <p class="text-danger">Error: {{ error }}</p>
+                    <p class="bg-red ">Error: {{ error }}</p>
                 {% endif %}
                 <div class="input-group">
-                    <input type="text" class="form-control" id="receiver" name="receiver" placeholder="Receiver username" class="form-control input-sm" maxlength="32"> <span class="input-group-btn">
-                    <button class="btn btn-primary" type="submit" id="new_chat">New Chat</button>
+                    <input type="text" class="pa2 input-reset ba bg-transparent
+                    hover-bg-black hover-white" id="receiver" name="receiver" placeholder="Receiver username" class="form-control input-sm" maxlength="32"> <span class="input-group-btn">
+                    <button class="f6 dim ph3 pv2 mb2 dib white bg-dark-green pointer" type="submit" id="new_chat">New Chat</button>
                     </span>
                 </div>
             </div>
         </div>
-
-        <table class="table table-hover" style="margin: auto;">
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Chat created</th>
-                <th>Last message time</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-                {% if chats %}
-                    {% for c in chats %}
+        <div class="flex flex-column justify-start items-start">
+            <div class="f3 fw6 ph0 mh0 self-center mb3">My Chats</div>
+            <div class="overflow-auto">
+                <table class="f6 w-100 mw8 center" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="fw6 bb b--black-20 tl pb3 pr3 bg-white">Username</th>
+                            <th class="fw6 bb b--black-20 tl pb3 pr3 bg-white">Chat created</th>
+                            <th class="fw6 bb b--black-20 tl pb3 pr3 bg-white">Last message time</th>
+                            <th class="fw6 bb b--black-20 tl pb3 pr3 bg-white">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody class="lh-copy">
+                        {% if chats %}
+                        {% for c in chats %}
                         <tr class="warning" id={{ c.id }}>
                             {% if c.user1_name == username %}
-                                <td>{{ c.user2_name }}</td>
+                            <td class="pv3 pr3 bb b--black-20">{{ c.user2_name }}</td>
                             {% elif c.user2_name == username %}
-                                <td>{{ c.user1_name }}</td>
+                            <td class="pv3 pr3 bb b--black-20">{{ c.user1_name }}</td>
                             {% else %}
-                                <td>{{ username }}</td>
+                            <td class="pv3 pr3 bb b--black-20">{{ username }}</td>
                             {% endif%}
-                            <td>{{ c.dt }}</td>
-                            <td>{{ c.last_message_dt }}</td>
-                            <td>
+                            <td class="pv3 pr3 bb b--black-20">{{ c.dt }}</td>
+                            <td class="pv3 pr3 bb b--black-20">{{ c.last_message_dt }}</td>
+                            <td class="pv3 pr3 bb b--black-20">
                                 <form action="{{ url_for('delete_chat', id=c.id) }}" method="post">
-                                    <input class="btn btn-danger" type="submit" value="Delete">
-                                </form>
+                                    <input class="f6 dim ph3 pv2 dib white bg-dark-red pointer"  type="submit" value="Delete">
+                                </form> 
                             </td>
-                        </tr> 
-                    {% endfor %}
-                {% else %}
-                    <tr class="danger">
-                        <td></td>
-                        <td>No chats found.</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                {% endif%}
-            </tbody>
-          </table>
-
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr class="danger">
+                            <td class="pv3 pr3 bb b--black-20"></td>
+                            <td class="pv3 pr3 bb b--black-20">No chats found.</td>
+                            <td class="pv3 pr3 bb b--black-20"></td>
+                            <td class="pv3 pr3 bb b--black-20"></td>
+                        </tr>
+                        {% endif%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

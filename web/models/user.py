@@ -80,6 +80,6 @@ def user_authenticated(username, password):
         # User not found
         return False
     # Get user hashed password
-    hashed = user.pass_hash.encode("utf-8")
+    hashed = user.pass_hash
     # Hash given password using salt and compare to stored hash
-    return bcrypt.hashpw(password.encode("utf-8"), hashed) == hashed
+    return bcrypt.checkpw(password.encode("utf-8"), hashed)
