@@ -22,7 +22,7 @@ class BaseTestCase(unittest.TestCase):
         os.unlink(SecureMessenger.app.config['DATABASE'])
         
     def create_account(self, username, password, public_key, user_data):
-        return self.app.post('/user/create', data=dict(
+        return self.app.post('/sign-up', data=dict(
             username=username,
             password=password,
             public_key=public_key,

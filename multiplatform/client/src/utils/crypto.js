@@ -94,7 +94,7 @@ export const processMessage = (key, id, message, idChat, updatePairs) => {
 	const { encodedPairList, userKeywords } = produceEncodedPairList(key, id, message, idChat);
 
 	if (updatePairs) {
-		// Request data to use in API call with uri: '/update/pairs'
+		// Request data to use in API call with uri: '/update-pairs'
 		const data = {
 			pairs: encodedPairList,
 			userKeywords
