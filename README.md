@@ -2,6 +2,12 @@
 
 End-to-end crypto chat, made with Flask and React
 
+![login](https://github.com/gusmendez99/Cipher_MyConfident/raw/master/images/login.jpeg?raw=true)
+
+![dashboard](https://github.com/gusmendez99/Cipher_MyConfident/raw/master/images/dashboard.jpeg?raw=true)
+
+![chat](https://github.com/gusmendez99/Cipher_MyConfident/raw/master/images/chat.jpeg?raw=true)
+
 ## Web
 
 ### Installation
@@ -57,5 +63,3 @@ Endpoints list pending
     * http://127.0.0.1:5000/api/v1/chat/1
 * Update pairs
   * http://127.0.0.1:5000/api/v1/chat/1/update-pairs
-* Search
-  * Not implemented
