@@ -1,98 +1,22 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <style>
-    *{
-    margin: 0;
-    padding: 0;
-    font-family: "Open Sans",sans-serif;
-    box-sizing: border-box;
-}
+{% extends "main.html" %}
 
-body{
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f1f1f1;
-}
+{% block title %}Messengr | About{% endblock %}
 
-.about-section{
-    
-    background-color: #fdfdfd;
-    overflow: hidden;
-    padding: 100px 0;
-}
+{% block content %}
 
-.inner-container{
-    width: 100%;
-    float: right;
-    background-color: #fdfdfd;
-    padding: 150px;
-}
+    <div class="container">
+        <div class="pa4">
 
-.inner-container h1{
-    margin-bottom: 30px;
-    font-size: 30px;
-    font-weight: 900;
-}
+            <h1 ca>End-to-end encryption messaging app with search capabilities</h1>
 
-.text{
-    font-size: 13px;
-    color: #545454;
-    line-height: 30px;
-    text-align: justify;
-    margin-bottom: 40px;
-}
+            <p>This project implements a proof-of-concept app that provides strong end-to-end encryption for chats and allows users to search through their encrypted messages without the server learning the contents any message nor what the user searched for. Created by: Luis Urbina, Gustavo Méndez, Randy Venegas, Michele Benvenuto and Roberto Figueroa.</p>
 
-.skills{
-    display: flex;
-    justify-content: space-between;
-    font-weight: 700;
-    font-size: 13px;
-}
-
-@media screen and (max-width:1200px){
-    .inner-container{
-        padding: 80px;
-    }
-}
-
-@media screen and (max-width:1000px){
-    .about-section{
-        background-size: 100%;
-        padding: 100px 40px;
-    }
-    .inner-container{
-        width: 100%;
-    }
-}
-
-@media screen and (max-width:600px){
-    .about-section{
-        padding: 0;
-    }
-    .inner-container{
-        padding: 60px;
-    }
-}
-    </style>
-</head>
-<body>
-    <div class="about-section">
-        <div class="inner-container">
-            <h1>About Us</h1>
-            <p class="text">
-                This project implements a proof-of-concept app that provides strong end-to-end encryption for chats and allows users to search through their encrypted messages without the server learning the contents any message nor what the user searched for. Created by: Luis Urbina, Gustavo Méndez, Randy Venegas, Michele Benvenuto and Roberto Figueroa.
-            </p>
             <h2>Motivation</h2>
-            <p class="text"> Recently, WhatsApp,Telegram, Discord and other popular messaging apps, introduced end-to-end encryption capabilities for messages sent on its service. End-to-End encryption is excellent because it makes it very difficult for the provider to learn the contents of the messages sent. However, while this improves privacy it forces the service to limit some potential functionality such as allowing the user to search through their messages on the server. If the user can't store all of the messages sent locally then the user loses the ability to search through those messages. We would like to introduce a web app that allows users to send messages to each other, encrypted end-to-end, but with the added ability of searching through their messages. By implementing a simplified version of  encryption like PBKDF2, Diffie-Helman and ElGamal. We aim to provide this capability to an end-to-end encryption web messaging app.</p>
-            <div class="skills">
-                
-            </div>
+
+            <p>Recently, WhatsApp,Telegram, Discord and other popular messaging apps, introduced end-to-end encryption capabilities for messages sent on its service. End-to-End encryption is excellent because it makes it very difficult for the provider to learn the contents of the messages sent. However, while this improves privacy it forces the service to limit some potential functionality such as allowing the user to search through their messages on the server. </p>
+            <p>If the user can't store all of the messages sent locally then the user loses the ability to search through those messages. We would like to introduce a web app that allows users to send messages to each other, encrypted end-to-end, but with the added ability of searching through their messages. By implementing a simplified version of  encryption like PBKDF2, Diffie-Helman and ElGamal. We aim to provide this capability to an end-to-end encryption web messaging app.</p></p>
+
         </div>
     </div>
-</body>
-</html>
+
+{% endblock %}
