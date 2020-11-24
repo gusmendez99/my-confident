@@ -46,7 +46,7 @@ $(document).ready(function () {
 	});
 
 	socket = io.connect(
-		"https://" + document.domain + ":" + location.port + "/chat"
+		"http://" + document.domain + ":" + location.port + "/chat"
 	);
 	socket.on("connect", function () {
 		socket.emit("joined", {});
@@ -166,58 +166,42 @@ $(document).ready(function () {
 	}
 
 	function newSenderMessage(msg, username, dt) {
-		return $("<div/>", { class: "row msg_container base_sent" })
-			.append(
-				$("<div/>", { class: "col-md-10 col-xs-10" }).append(
-					$("<div/>", { class: "messages msg_sent" })
-						.append($("<p/>", { class: "text-warning", text: msg }))
-						.append(
-							$("<time/>", {
-								class: "",
-								datetime: dt,
-								text: username + "•" + dt,
-							})
-						)
-				)
+		return $("<li/>", {
+			class: "flex items-center lh-copy pa3 ph0-l bb b--black-10",
+		}).append(
+			$("<div/>", { class: "flex-auto tr pr3 msg_sent" }).append(
+				$("<span/>", { class: "" }).append(
+					$("<strong/>", { class: "", text: username }),
+					$("<span/>", { class: "", text: "•" + dt })
+				),
+				$("<p/>", { class: "f6 db black-70 text-warning", text: msg })
+			),
+			$("<div/>", { class: "" }).append(
+				$("<img/>", {
+					src: "http://mrmrs.cc/photos/p/2.jpg",
+					class: "w2 h2 w3-ns h3-ns br-100 ma2",
+				})
 			)
-			.append(
-				$("<div/>", { class: "col-md-2 col-xs-2 avatar" }).append(
-					$("<img/>", {
-						src:
-							"https://secure.gravatar.com/avatar/00000000000000000000000000000000?d=retro",
-						height: "100",
-						width: "100",
-						class: "img-responsive",
-					})
-				)
-			);
+		);
 	}
 
 	function newReceiverMessage(msg, username, dt) {
-		return $("<div/>", { class: "row msg_container base_receive" })
-			.append(
-				$("<div/>", { class: "col-md-2 col-xs-2 avatar" }).append(
-					$("<img/>", {
-						src:
-							"https://secure.gravatar.com/avatar/00000000000000000000000000000000?d=retro",
-						height: "100",
-						width: "100",
-						class: "img-responsive",
-					})
-				)
+		return $("<li/>", {
+			class: "flex items-center lh-copy pa3 ph0-l bb b--black-10",
+		}).append(
+			$("<div/>", { class: "tl msg_receive" }).append(
+				$("<img/>", {
+					src: "http://mrmrs.cc/photos/p/4.jpg",
+					class: "w2 h2 w3-ns h3-ns br-100 ma2",
+				})
+			),
+			$("<div/>", { class: "flex-auto tl pl3 msg_receive" }).append(
+				$("<span/>", { class: "" }).append(
+					$("<strong/>", { class: "", text: username }),
+					$("<span/>", { class: "", text: "•" + dt })
+				),
+				$("<p/>", { class: "f6 db black-70 text-warning", text: msg })
 			)
-			.append(
-				$("<div/>", { class: "col-md-10 col-xs-10" }).append(
-					$("<div/>", { class: "messages msg_sent" })
-						.append($("<p/>", { class: "text-warning", text: msg }))
-						.append(
-							$("<time/>", {
-								class: "",
-								datetime: dt,
-								text: username + "•" + dt,
-							})
-						)
-				)
-			);
+		);
 	}
 });

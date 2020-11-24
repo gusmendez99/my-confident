@@ -40,7 +40,7 @@ class Message(DB.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "dt": self.dt.isoformat(),
+            "dt": self.dt.strftime('%Y-%m-%d %H:%M:%S'),
             "text": self.text,
             "sender_id": self.sender_id,
             "sender_username": self.sender_username,

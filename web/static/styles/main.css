@@ -1,3 +1,13 @@
 body {
     font-family: 'Raleway', sans-serif;
 }
+
+.chat-container {
+    height: 550px;
+    width: 500px;
+    overflow: hidden;
+}
+
+.chat-container:hover {
+    overflow: auto;
+}

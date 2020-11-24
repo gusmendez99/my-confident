@@ -1,32 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-        <title>
-            {% block title %}My Confident{% endblock %}
-        </title>
+    <title>
+        {% block title %}My Confident{% endblock %}
+    </title>
 
-        <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
-       <!--Fonts--> 
-       <link rel="preconnect" href="https://fonts.gstatic.com">
-       <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,300&display=swap" rel="stylesheet"> 
-        <!--[if lt IE 9]>
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" />
+    <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
-        <link href="{{ url_for('static', filename='styles/main.css') }}" rel="stylesheet">
-        
-        <script type=text/javascript>
-            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-        </script>
+    <link href="{{ url_for('static', filename='styles/main.css') }}" rel="stylesheet">
 
-         
-    </head>
-    <body>
+    <script type=text/javascript> $SCRIPT_ROOT={{ request.script_root|tojson|safe }}; </script> </head> <body>
         {% block nav %}
 
             <nav class="flex justify-between bb b--white-10p bg-black mb4 pv3">
@@ -42,25 +37,26 @@
                     <a class="f6 link dib white dim mr3 mr4-ns" href="{{ url_for('about') }}">About</a>
                     {% if not 'logged_in' in session %}
                         <script>sessionStorage.clear();</script>
-                        <a class="f6 link dib white dim mr3 mr4-ns" href="{{ url_for('login') }}">Login</a>
-                    {% else %}
-                        <a class="f6 link dib white dim mr3 mr4-ns" href="{{ url_for('logout') }}">Logout</a>
-                    {% endif %}
-                </div>
-            </nav>
-        {% endblock %}
+    <a class="f6 link dib white dim mr3 mr4-ns" href="{{ url_for('login') }}">Login</a>
+    {% else %}
+    <a class="f6 link dib white dim mr3 mr4-ns" href="{{ url_for('logout') }}">Logout</a>
+    {% endif %}
+    </div>
+    </nav>
+    {% endblock %}
 
-        {% block content %}
-        {% endblock %}
+    {% block content %}
+    {% endblock %}
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-        <script src="{{ url_for('static', filename='scripts/sjcl.js') }}"></script>
-        <script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-        
-        {% block extra_js %}
-        {% endblock%}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='scripts/sjcl.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+
+    {% block extra_js %}
+    {% endblock%}
 
     </body>
+
 </html>

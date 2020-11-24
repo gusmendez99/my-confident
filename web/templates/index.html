@@ -17,17 +17,17 @@
 <div class="flex pv2 ph4 justify-between items-center">
 
     <div>
-        <h1 class="athelas b">My Chats</h1>
+        <h1 class="b">My Chats</h1>
     </div>
     <div>
         {% if error %}
         <p class="text-danger">Error: {{ error }}</p>
         {% endif %}
         <div class="flex items-center">
-            <input type="text" class="form-control" id="receiver" name="receiver" placeholder="Receiver username"
-                class="f6 f5-l input-reset bn fl black-80 bg-white pa3 lh-solid w-100 w-75-m w-80-l br2-ns br--left-ns"
-                maxlength="32"> <span class="input-group-btn">
-                <button class="f6 link dim br1 ph3 pv2 mb2 dib white bg-dark-green" type="submit" id="new_chat">New
+            <input type="text" id="receiver" name="receiver" placeholder="Receiver username"
+                class="f6 pa2 input-reset ba bg-transparent hover-bg-black hover-white w-60" maxlength="32"> <span
+                class="input-group-btn">
+                <button class="b b--black f6 link dim pa2 dib white bg-blue" type="submit" id="new_chat">New
                     Chat</button>
             </span>
         </div>
@@ -35,37 +35,49 @@
 
 </div>
 <div>
-    <ul class="list h5 pa3 pl0 mt0 measure center overflow-auto">
+    <div class="mt4 measure center overflow-auto">
         {% if chats %}
-        {% for c in chats %}
-        <li id={{ c.id }} class="flex items-center lh-copy pa3 ph0-l bb b--black-10">
-            <img class="w2 h2 w3-ns h3-ns br-100" src="http://tachyons.io/img/avatar-mrmrs.jpg" />
-            {% if c.user1_name == username %}
-            <!-- para el titulo  -->
-            <div class="pl3 flex-auto">
-                <a href="{{ url_for('chat', id=c.id) }}" class="f1 fw6 db  navy link dim">{{ c.user2_name }}</a>
-                {% elif c.user2_name == username %}
-                <a href="{{ url_for('chat', id=c.id) }}" class="f1 fw6 db  navy link dim">{{ c.user1_name }}</a>
+        {% for chat in chats %}
+        <article class="dt w-100 bb b--black-05 pb2 mt2 " href="#0">
+            <div class="dtc w2 w3-ns v-mid">
+                <img src="http://tachyons.io/img/avatar-yavor.jpg" class="ba b--black-10 db br-100 w2 w3-ns h2 h3-ns" />
+            </div>
+            <div class="dtc v-mid pl3">
+                {% if chat.user1_name == username %}
+                <h1 class="f6 f5-ns fw6 lh-title black mv0">{{ chat.user2_name }}</h1>
+                {% elif chat.user2_name == username %}
+                <h1 class="f6 f5-ns fw6 lh-title black mv0">{{ chat.user1_name }}</h1>
                 {% else %}
-                <a href="{{ url_for('chat', id=c.id) }}" class="f1 fw6 db  navy link dim">{{ username }}</a>
+                <h1 class="f6 f5-ns fw6 lh-title black mv0">{{ username }}</h1>
                 {% endif%}
-                <!-- <span class="f6 db black-70">{{ c.dt }}</span> -->
-                <span class="f3 db mid-gray">{{ c.last_message_dt }}</span>
+
+                <h2 class="f6 fw4 mt0 mb0 black-60">{{ chat.last_message_dt }}</h2>
             </div>
-            <!-- para el boton -->
-            <div>
-                <form action="{{ url_for('delete_chat', id=c.id) }}" method="post">
-                    <input class="f6 link dim ba bw2 ph3 pv2 mb2 dib dark-pink" type="submit" value="&#10006">
-                </form>
+            <div class="dtc v-mid">
+                <div class="dtc">
+                    <form action="{{ url_for('delete_chat', id=chat.id) }}" method="post">
+                        <button type="submit"
+                            class="f6 ma1 pa2 button-reset bg-white ba b--black-10 dim pointer pv1 black-60">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+                <div class="dtc">
+                    <a href="{{ url_for('chat', id=chat.id) }}"
+                        class="link ma1 pa2 f6 bg-blue ba b--black-10 dim pointer pv1 white-60">
+                        View
+                    </a>
+                </div>
             </div>
-        </li>
+        </article>
+
         {% endfor %}
         {% else %}
-        <div>
-            <h2>No chats found.</h2>
+        <div class="pl3 flex-auto">
+            <h2 class="tc">No chats yet...</h2>
         </div>
         {% endif%}
-    </ul>
+    </div>
 </div>
 
 {% endblock %}

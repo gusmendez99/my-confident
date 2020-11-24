@@ -37,14 +37,14 @@ class Chat(DB.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "dt": self.dt.isoformat(),
+            "dt": self.dt.strftime('%Y-%m-%d %H:%M:%S'),
             "user1_id": self.user1_id,
             "user1_name": self.user1_name,
             "user1_sk_sym": self.user1_sk_sym,
             "user2_id": self.user2_id,
             "user2_name": self.user2_name,
             "user2_sk_sym": self.user2_sk_sym,
-            "last_message_dt": self.last_message_dt.isoformat(),
+            "last_message_dt": self.last_message_dt.strftime('%Y-%m-%d %H:%M:%S'),
         }
 
 
